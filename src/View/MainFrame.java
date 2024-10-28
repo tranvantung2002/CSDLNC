@@ -1,25 +1,18 @@
-import com.db4o.Db4oEmbedded;
-import com.db4o.ObjectContainer;
-import com.db4o.config.EmbeddedConfiguration;
+package View;
 
 import javax.swing.*;
 import java.awt.event.*;
-import java.text.SimpleDateFormat;
 
-public class GUI extends JDialog {
+public class MainFrame extends JFrame {
     private JPanel contentPane;
     private JButton buttonOK;
     private JButton buttonCancel;
 
-    public static final String DBNAME = "QuanLyBanHang";
-    public static ObjectContainer db = null;
-    private static final int OBJECT_GRAPH_DEPTH = 3;
-    private static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-
-    public GUI() {
+    public MainFrame() {
         setContentPane(contentPane);
-        setModal(true);
         getRootPane().setDefaultButton(buttonOK);
+        setSize(500, 700);
+        setVisible(true);
 
         buttonOK.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -34,7 +27,7 @@ public class GUI extends JDialog {
         });
 
         // call onCancel() when cross is clicked
-        setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
         addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent e) {
                 onCancel();
@@ -57,12 +50,5 @@ public class GUI extends JDialog {
     private void onCancel() {
         // add your code here if necessary
         dispose();
-    }
-
-    public static void main(String[] args) {
-        GUI dialog = new GUI();
-        dialog.pack();
-        dialog.setVisible(true);
-        System.exit(0);
     }
 }
