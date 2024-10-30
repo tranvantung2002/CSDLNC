@@ -14,6 +14,11 @@ public class MainFrame extends JFrame {
         setSize(500, 700);
         setVisible(true);
 
+        JPanel jPanel = new JPanel();
+        jPanel.add(new DatePicker());
+
+        contentPane.add(jPanel);
+
         buttonOK.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 onOK();
