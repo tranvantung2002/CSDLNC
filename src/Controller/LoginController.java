@@ -1,42 +1,34 @@
 package Controller;
 
-import View.LoginFrame;
-import View.MainFrame;
+import View.LoginView;
 
-import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class LoginController {
-    private LoginFrame loginFrame;
+    private final LoginView view;
 
-    public LoginController(LoginFrame loginFrame){
-        this.loginFrame = loginFrame;
+    public LoginController(LoginView view) {
+        this.view = view;
 
-        loginFrame.addLoginButtonListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                performLogin();
-            }
-        });
+        // Gắn sự kiện cho nút đăng nhập
+        this.view.addLoginListener(new LoginActionListener());
     }
-    private void performLogin() {
-        String username = loginFrame.getUserName();
-        String password = loginFrame.getPassword();
 
-        // Kiểm tra thông tin đăng nhập
-        if (username.equals("admin") && password.equals("123456")) {
-            int result = JOptionPane.showConfirmDialog(loginFrame,
-                    "Đăng nhập thành công!", "Thông báo",
-                    JOptionPane.DEFAULT_OPTION);
+    // Lớp xử lý sự kiện đăng nhập
+    class LoginActionListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            String username = view.getUsername();
+            String password = view.getPassword();
 
-            // Chỉ đặt isLogin = true nếu người dùng nhấn OK
-            if (result == JOptionPane.OK_OPTION) {
-                loginFrame.dispose(); // Đóng cửa sổ đăng nhập
-                new MainFrame(); // Mở màn hình chính
+            // Logic kiểm tra tài khoản (ví dụ)
+            if (username.equals("admin") && password.equals("password")) {
+                view.setMessage("ĐĂNG NHẬP THÀNH CÔNG!");
+                // Điều hướng đến màn hình chính hoặc các hành động khác
+            } else {
+                view.setMessage("ĐĂNG NHẬP THẤT BẠI");
             }
-        } else {
-            JOptionPane.showMessageDialog(loginFrame, "Sai tên đăng nhập hoặc mật khẩu!", "Lỗi", JOptionPane.ERROR_MESSAGE);
         }
     }
-
 }
