@@ -4,6 +4,11 @@ public class LoaiKhachHang {
     private String MaLoaiKhachHang;
     private String TenLoaiKhachHang;
 
+    public LoaiKhachHang(String maLoaiKhachHang, String tenLoaiKhachHang) {
+        MaLoaiKhachHang = maLoaiKhachHang;
+        TenLoaiKhachHang = tenLoaiKhachHang;
+    }
+
     public String getMaLoaiKhachHang() {
         return MaLoaiKhachHang;
     }
