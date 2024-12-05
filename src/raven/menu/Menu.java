@@ -30,7 +30,7 @@ public class Menu extends JPanel {
             {"Quản lý loại sản phầm", "Inbox", "Read", "Compost"},
             {"Quản lý quyền sử dụng", "Inbox", "Read", "Compost"},
             {"Quản lý người dùng", "Inbox", "Read", "Compost"},
-            {"Quản lý nhân viên", "Inbox", "Read", "Compost"},
+            {"Quản lý nhân viên", "Danh sách nhân viên"},
             {"Báo cáo", "Inbox", "Read", "Compost"},
             {"Logout"}
     };
