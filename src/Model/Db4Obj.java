@@ -21,6 +21,9 @@ public class Db4Obj {
     public static void KhoiTaoDB() {
         try {
             File file = new File(DBNAME);
+            //if (file.exists()) {
+    		//	file.delete();
+    		//}
             
             EmbeddedConfiguration config = Db4oEmbedded.newConfiguration();
             config.common().updateDepth(OBJECT_GRAPH_DEPTH);
@@ -109,11 +112,11 @@ public class Db4Obj {
             HoaDon hoaDon4 = new HoaDon(1004, 204, 304, new Date(), 4500.0f, "Khách hàng thân thiết");
             HoaDon hoaDon5 = new HoaDon(1005, 205, 305, new Date(), 5500.0f, "Thanh toán trực tiếp");
 
-            KhachHang khachHang1 = new KhachHang(001, "Nguyễn Văn A", new Date(1990 - 1900, 5, 15), 1, "123 Đường ABC, Hà Nội", "0123456789", "Thường", "Khách hàng mới");
-            KhachHang khachHang2 = new KhachHang(002, "Trần Thị B", new Date(1985 - 1900, 10, 20), 0, "456 Đường DEF, TP.HCM", "0987654321", "VIP", "Thành viên lâu năm");
-            KhachHang khachHang3 = new KhachHang(003, "Lê Văn C", new Date(1995 - 1900, 2, 28), 1, "789 Đường GHI, Đà Nẵng", "0345678912", "Tiềm năng", "Quan tâm chương trình khuyến mãi");
-            KhachHang khachHang4 = new KhachHang(004, "Phạm Thị D", new Date(2000 - 1900, 7, 5), 0, "101 Đường JKL, Cần Thơ", "0765432198", "Thường", "Khách hàng trung thành");
-            KhachHang khachHang5 = new KhachHang(005, "Hoàng Văn E", new Date(1998 - 1900, 11, 30), 1, "202 Đường MNO, Hải Phòng", "0567891234", "VIP", "Khách hàng ưu tiên");
+            KhachHang khachHang1 = new KhachHang(001, "Nguyễn Văn A", new Date(1990 - 1900, 5, 15), "Nam", "123 Đường ABC, Hà Nội", "0123456789", "Thường", "Khách hàng mới");
+            KhachHang khachHang2 = new KhachHang(002, "Trần Thị B", new Date(1985 - 1900, 10, 20), "Nữ", "456 Đường DEF, TP.HCM", "0987654321", "VIP", "Thành viên lâu năm");
+            KhachHang khachHang3 = new KhachHang(003, "Lê Văn C", new Date(1995 - 1900, 2, 28), "Nam", "789 Đường GHI, Đà Nẵng", "0345678912", "Tiềm năng", "Quan tâm chương trình khuyến mãi");
+            KhachHang khachHang4 = new KhachHang(004, "Phạm Thị D", new Date(2000 - 1900, 7, 5), "Nữ", "101 Đường JKL, Cần Thơ", "0765432198", "Thường", "Khách hàng trung thành");
+            KhachHang khachHang5 = new KhachHang(005, "Hoàng Văn E", new Date(1998 - 1900, 11, 30), "Nam", "202 Đường MNO, Hải Phòng", "0567891234", "VIP", "Khách hàng ưu tiên");
 
             LoaiKhachHang loaiKhachHang1 = new LoaiKhachHang("LKH01", "Thường");
             LoaiKhachHang loaiKhachHang2 = new LoaiKhachHang("LKH02", "VIP");

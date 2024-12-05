@@ -6,6 +6,7 @@ import com.formdev.flatlaf.util.UIScale;
 import raven.application.Application;
 import raven.application.form.other.FormDashboard;
 import raven.application.form.other.FormRead;
+import View.QuanLyKhachHang;
 import View.QuanLyNhanVien;
 import View.QuanLySanPham;
 import raven.menu.Menu;
@@ -76,7 +77,17 @@ public class MainForm extends JLayeredPane {
                 } else {
                     action.cancel();
                 }
-            } else if (index == 5) {
+            } else if (index == 4) {
+           	 if (subIndex == 1) {
+        		 Application.showForm(new QuanLyKhachHang());
+             } else if (subIndex == 2) {
+                 
+             } else {
+                 action.cancel();
+             }
+            
+          }         
+            else if (index == 5) {
             	 if (subIndex == 1) {
             		 Application.showForm(new QuanLyNhanVien());
                  } else if (subIndex == 2) {
