@@ -7,6 +7,7 @@ public class LoaiSanPham {
     public LoaiSanPham(int maLoaiSanPham, String tenLoaiSanPham) {
         MaLoaiSanPham = maLoaiSanPham;
         TenLoaiSanPham = tenLoaiSanPham;
+
     }
 
     public int getMaLoaiSanPham() {
@@ -20,7 +21,6 @@ public class LoaiSanPham {
     public String getTenLoaiSanPham() {
         return TenLoaiSanPham;
     }
-
     public void setTenLoaiSanPham(String tenLoaiSanPham) {
         TenLoaiSanPham = tenLoaiSanPham;
     }
