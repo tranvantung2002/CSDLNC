@@ -1,14 +1,11 @@
 package raven.application.form;
 
+import View.*;
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.extras.FlatSVGIcon;
 import com.formdev.flatlaf.util.UIScale;
 import raven.application.Application;
 import raven.application.form.other.FormDashboard;
-import raven.application.form.other.FormRead;
-import View.QuanLyKhachHang;
-import View.QuanLyNhanVien;
-import View.QuanLySanPham;
 import raven.menu.Menu;
 import raven.menu.MenuAction;
 
@@ -73,21 +70,29 @@ public class MainForm extends JLayeredPane {
                 if (subIndex == 1) {
                     Application.showForm(new QuanLySanPham());
                 } else if (subIndex == 2) {
-                    Application.showForm(new FormRead());
+                    Application.showForm(new QuanLyLoaiSanPham());
+                } else if (subIndex == 3) {
+                    Application.showForm(new QuanLyHangSanXuat());
                 } else {
                     action.cancel();
                 }
+            } else if (index == 2) {
+                if (subIndex == 2) {
+                    Application.showForm(new QuanLyNhanVien());
+                }
+            } else if (index == 3) {
+                if (subIndex == 1) {
+                    Application.showForm(new QuanLyKhachHang());
+                } else if (subIndex == 2) {
+                    Application.showForm(new QuanLyLoaiKhachHang());
+                }
             } else if (index == 4) {
            	 if (subIndex == 1) {
-        		 Application.showForm(new QuanLyKhachHang());
-             } else if (subIndex == 2) {
-                 
+                 Application.showForm(new QuanLyNhaPhanPhoi());
              } else {
                  action.cancel();
              }
-            
-          }         
-            else if (index == 5) {
+            } else if (index == 5) {
             	 if (subIndex == 1) {
             		 Application.showForm(new QuanLyNhanVien());
                  } else if (subIndex == 2) {
@@ -95,9 +100,15 @@ public class MainForm extends JLayeredPane {
                  } else {
                      action.cancel();
                  }
-                
-            } 
-            else if (index == 9) {
+            } else if (index == 6) {
+                if (subIndex == 1) {
+                    Application.showForm(new QuanLyHoaDon());
+                } else if (subIndex == 2) {
+                    Application.showForm(new QuanLyChiTietHoaDon());
+                }
+            } else if (index == 7) {
+
+            } else if (index == 9) {
                 Application.logout();
             } else {
                 action.cancel();

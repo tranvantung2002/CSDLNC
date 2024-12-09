@@ -288,26 +288,6 @@ Db4Obj {
     }
 
     // Update Dữ liệu
-    public static void UpdateDuLieuBenh(ObjectSet os, String tenTruong, String giaTri) {
-        try {
-
-            for (Object object : os) {
-//                Disease disease = (Disease) object;
-//                if (tenTruong == "diseaseName") {
-//                    disease.setDiseaseName(giaTri);
-//                } else if (tenTruong == "diagnosisDate") {
-//                    disease.setDiagnosisDate(dateFormat.parse(giaTri));
-//                } else if (tenTruong == "severity") {
-//                    disease.setSeverity(Integer.parseInt(giaTri));
-//                }
-//                db.store(disease);
-            }
-
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
-    }
-
     public static void UpdateRecord(Object newObj, String type, String tenTruong, int id) {
         try {
             // Truy vấn để lấy bản ghi cần cập nhật
