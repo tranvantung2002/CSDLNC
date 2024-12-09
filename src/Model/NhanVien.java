@@ -5,7 +5,7 @@ import java.util.Date;
 public class NhanVien {
     private int MaNhanVien;
     private String HovaTen;
-    private Date NgaySinh;
+    //private Date NgaySinh;
     private String GioiTinh;
     private Date NgayVaoLam;
     private String ChucVu;
@@ -14,12 +14,12 @@ public class NhanVien {
     private String GhiChu;
     
     
-	public NhanVien(int maNhanVien, String hovaTen, Date ngaySinh, String gioiTinh, Date ngayVaoLam, String chucVu,
+	public NhanVien(int maNhanVien, String hovaTen, String gioiTinh, Date ngayVaoLam, String chucVu,
 			String diaChi, String soDT, String ghiChu) {
 		super();
 		MaNhanVien = maNhanVien;
 		HovaTen = hovaTen;
-		NgaySinh = ngaySinh;
+		//NgaySinh = ngaySinh;
 		GioiTinh = gioiTinh;
 		NgayVaoLam = ngayVaoLam;
 		ChucVu = chucVu;
@@ -46,16 +46,6 @@ public class NhanVien {
 
 	public void setHovaTen(String hovaTen) {
 		HovaTen = hovaTen;
-	}
-
-
-	public Date getNgaySinh() {
-		return NgaySinh;
-	}
-
-
-	public void setNgaySinh(Date ngaySinh) {
-		NgaySinh = ngaySinh;
 	}
 
 
@@ -121,7 +111,7 @@ public class NhanVien {
 
 	@Override
 	public String toString() {
-		return "NhanVien [MaNhanVien=" + MaNhanVien + ", HovaTen=" + HovaTen + ", NgaySinh=" + NgaySinh + ", GioiTinh="
+		return "NhanVien [MaNhanVien=" + MaNhanVien + ", HovaTen=" + HovaTen + ", GioiTinh="
 				+ GioiTinh + ", NgayVaoLam=" + NgayVaoLam + ", ChucVu=" + ChucVu + ", DiaChi=" + DiaChi + ", SoDT="
 				+ SoDT + ", GhiChu=" + GhiChu + "]";
 	}

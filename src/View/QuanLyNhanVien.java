@@ -1,11 +1,16 @@
 package View;
 
+import static Model.Db4Obj.AddRecord;
+import static Model.Db4Obj.DeleteRecord;
+import static Model.Db4Obj.UpdateRecord;
 import static Model.Db4Obj.ListAllDuLieu;
 
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.Date;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 import javax.swing.GroupLayout;
@@ -17,6 +22,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.text.StringContent;
 
@@ -31,6 +38,8 @@ public class QuanLyNhanVien extends javax.swing.JPanel {
     private JTextField tfID, tfName, tfGioiTinh,tfNgayVaoLam,tfChucVu,tfDiaChi,tfMobile,tfGhiChu ;
     private JButton btnAdd, btnUpdate, btnDelete;
     private DefaultTableModel model;
+    private String pattern = "dd/MM/yyyy";
+    private DateFormat df = new SimpleDateFormat(pattern);
     
     public QuanLyNhanVien() {
 		// TODO Auto-generated constructor stub
@@ -78,7 +87,7 @@ public class QuanLyNhanVien extends javax.swing.JPanel {
             data[i][0] = sp.getMaNhanVien();
             data[i][1] = sp.getHovaTen();
             data[i][2] = sp.getGioiTinh();
-            data[i][3] = sp.getNgayVaoLam();
+            data[i][3] = df.format(sp.getNgayVaoLam());
             data[i][4] = sp.getChucVu();
             data[i][5] = sp.getDiaChi();
             data[i][6] = sp.getSoDT();
@@ -116,6 +125,26 @@ public class QuanLyNhanVien extends javax.swing.JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 deleteNhanVien();
+            }
+        });
+        
+     // Lắng nghe sự kiện chọn hàng trong bảng
+        table.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                if (!e.getValueIsAdjusting()) {
+                    int selectedRow = table.getSelectedRow();
+                    if (selectedRow != -1) {
+                        tfID.setText(model.getValueAt(selectedRow, 0).toString());
+                        tfName.setText(model.getValueAt(selectedRow, 1).toString());
+                        tfGioiTinh.setText(model.getValueAt(selectedRow, 2).toString());
+                        tfNgayVaoLam.setText(model.getValueAt(selectedRow, 3).toString());
+                        tfChucVu.setText(model.getValueAt(selectedRow, 4).toString());
+                        tfDiaChi.setText(model.getValueAt(selectedRow, 5).toString());
+                        tfMobile.setText(model.getValueAt(selectedRow, 6).toString());
+                        tfGhiChu.setText(model.getValueAt(selectedRow, 7).toString());
+                    }
+                }
             }
         });
 
@@ -218,11 +247,24 @@ public class QuanLyNhanVien extends javax.swing.JPanel {
         String title = tfChucVu.getText();
         String address = tfDiaChi.getText();
         int mobile = Integer.parseInt(tfMobile.getText().trim());
+        String mobileNumber = tfMobile.getText().trim();
         String note = tfGhiChu.getText();
         
+        java.util.Date dateOfWork = null;
+        
+        try {
+        	dateOfWork = (java.util.Date) df.parse(date);
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         if (!id.isEmpty() && !name.isEmpty() && !sex.isEmpty() && !date.isEmpty() && !title.isEmpty()) {
             model.addRow(new Object[]{id, name, sex, date, title, address, mobile, note});
+            
+            NhanVien nhanVien = new NhanVien(Integer.parseInt(id), name, sex, dateOfWork, title, address, mobileNumber, note);
+            AddRecord(nhanVien, "NhanVien");
+            
             clearFields();
         } else {
             JOptionPane.showMessageDialog(this, "Vui lòng nhập đầy đủ thông tin!");
@@ -239,18 +281,47 @@ public class QuanLyNhanVien extends javax.swing.JPanel {
             String title = tfChucVu.getText();
             String address = tfDiaChi.getText();
             int mobile = Integer.parseInt(tfMobile.getText().trim());
+            String mobileNumber = tfMobile.getText().trim();
             String note = tfGhiChu.getText();
+            
+            DateFormat df = new SimpleDateFormat(pattern); 
+            java.util.Date dateOfWork = null;
+            
+            try {
+            	dateOfWork = (java.util.Date) df.parse(date);
+                
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
 
             if (!id.isEmpty() && !name.isEmpty() && !sex.isEmpty()) {
-                model.setValueAt(id, selectedRow, 0);
-                model.setValueAt(name, selectedRow, 1);
-                model.setValueAt(sex, selectedRow, 2);
-                model.setValueAt(date, selectedRow, 3);
-                model.setValueAt(title, selectedRow, 4);
-                model.setValueAt(address, selectedRow, 5);
-                model.setValueAt(mobile, selectedRow, 6);
-                model.setValueAt(note, selectedRow, 7);
-                clearFields();
+            	
+            	int confirm = JOptionPane.showConfirmDialog(
+                        this,
+                        "Bạn có chắc chắn muốn sửa nhân viên đã chọn?",
+                        "Xác nhận",
+                        JOptionPane.YES_NO_OPTION
+                );
+            	
+            	if (confirm == JOptionPane.YES_OPTION) {
+                    // Xử lý xóa sản phẩm tại đây
+            		model.removeRow(selectedRow);
+            		model.setValueAt(id, selectedRow, 0);
+                    model.setValueAt(name, selectedRow, 1);
+                    model.setValueAt(sex, selectedRow, 2);
+                    model.setValueAt(df.format(dateOfWork), selectedRow, 3);
+                    model.setValueAt(title, selectedRow, 4);
+                    model.setValueAt(address, selectedRow, 5);
+                    model.setValueAt(mobile, selectedRow, 6);
+                    model.setValueAt(note, selectedRow, 7);
+                    
+                    NhanVien nhanVien = new NhanVien(Integer.parseInt(id), name, sex, dateOfWork, title, address, mobileNumber , note);
+
+                    System.out.println(nhanVien);
+                    UpdateRecord(nhanVien, "NhanVien", "MaNhanVien", Integer.parseInt(id));
+                    
+                    clearFields();
+
             } else {
                 JOptionPane.showMessageDialog(this, "Vui lòng nhập đầy đủ thông tin!");
             }
@@ -258,13 +329,29 @@ public class QuanLyNhanVien extends javax.swing.JPanel {
             JOptionPane.showMessageDialog(this, "Vui lòng chọn sản phẩm cần sửa!");
         }
     }
+   }
     
     private void deleteNhanVien() {
         int selectedRow = table.getSelectedRow();
         if (selectedRow != -1) {
+        	
+        	int confirm = JOptionPane.showConfirmDialog(
+                    this,
+                    "Bạn có chắc chắn muốn xoá khách hàng đã chọn?",
+                    "Xác nhận",
+                    JOptionPane.YES_NO_OPTION
+            );
+        	
+        	if (confirm == JOptionPane.YES_OPTION) {
+                // Xử lý xóa sản phẩm tại đây
+        	
             model.removeRow(selectedRow);
+            String id = tfID.getText();
+
+            DeleteRecord("NhanVien", "MaNhanVien", Integer.parseInt(id));
+        }
         } else {
-            JOptionPane.showMessageDialog(this, "Vui lòng chọn sản phẩm cần xoá!");
+            JOptionPane.showMessageDialog(this, "Vui lòng chọn nhân viên cần xoá!");
         }
     }
     

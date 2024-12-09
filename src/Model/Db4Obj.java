@@ -144,7 +144,7 @@ Db4Obj {
             HoaDon hoaDon4 = new HoaDon(1004, 204, 304, new Date(), 4500.0f, "Khách hàng thân thiết");
             HoaDon hoaDon5 = new HoaDon(1005, 205, 305, new Date(), 5500.0f, "Thanh toán trực tiếp");
 
-            KhachHang khachHang1 = new KhachHang(001, "Nguyễn Văn A", new Date(1990 - 1900, 5, 15), "Nam", "123 Đường ABC, Hà Nội", "0123456789", "Thường", "Khách hàng mới");
+            KhachHang khachHang1 = new KhachHang(001, "Nguyễn Văn A" , new Date(1990 - 1900, 5, 15), "Nam", "123 Đường ABC, Hà Nội", "0123456789", "Thường", "Khách hàng mới");
             KhachHang khachHang2 = new KhachHang(002, "Trần Thị B", new Date(1985 - 1900, 10, 20), "Nữ", "456 Đường DEF, TP.HCM", "0987654321", "VIP", "Thành viên lâu năm");
             KhachHang khachHang3 = new KhachHang(003, "Lê Văn C", new Date(1995 - 1900, 2, 28), "Nam", "789 Đường GHI, Đà Nẵng", "0345678912", "Tiềm năng", "Quan tâm chương trình khuyến mãi");
             KhachHang khachHang4 = new KhachHang(004, "Phạm Thị D", new Date(2000 - 1900, 7, 5), "Nữ", "101 Đường JKL, Cần Thơ", "0765432198", "Thường", "Khách hàng trung thành");
@@ -162,11 +162,11 @@ Db4Obj {
             LoaiSanPham loaiSanPham4 = new LoaiSanPham(4, "Tivi");
             LoaiSanPham loaiSanPham5 = new LoaiSanPham(5, "Phụ kiện");
 
-            NhanVien nhanVien1 = new NhanVien(1, "Nguyễn Quang Thắng", new Date(1990 - 1900, 3, 15), "Nam", new Date(2020 - 1900, 5, 1), "Trưởng phòng IT", "123 Đường A, Hà Nội", "0123456789", "Hợp đồng vô thời hạn");
-            NhanVien nhanVien2 = new NhanVien(2, "Trần Tuấn Hữu", new Date(1985 - 1900, 7, 20), "Nam", new Date(2019 - 1900, 8, 15), "Chuyên viên CNTT", "456 Đường B, TP.HCM", "0987654321", "Hợp đồng vô thời hạn");
-            NhanVien nhanVien3 = new NhanVien(3, "Trần Ngọc Bích", new Date(1995 - 1900, 11, 25), "Nữ", new Date(2021 - 1900, 3, 10), "Nhân viên bán hàng" , "789 Đường C, Đà Nẵng", "0345678912", "Hợp đồng dịch vụ");
-            NhanVien nhanVien4 = new NhanVien(4, "Nguyễn Hoàng Nam", new Date(1992 - 1900, 1, 5), "Nam", new Date(2018 - 1900, 9, 12), "Phó phòng" , "101 Đường D, Cần Thơ", "0765432198", "Hợp đồng vô thời hạn" );
-            NhanVien nhanVien5 = new NhanVien(5, "Đỗ Đức Độ", new Date(1998 - 1900, 6, 30), "Nam", new Date(2022 - 1900, 7, 20), "Nhân viên kho" , "202 Đường E, Hải Phòng", "0567891234", "Hợp đồng 1 năm" );
+            NhanVien nhanVien1 = new NhanVien(1, "Nguyễn Quang Thắng", "Nam", new Date(2020 - 1900, 5, 1), "Trưởng phòng IT", "123 Đường A, Hà Nội", "0123456789", "Hợp đồng vô thời hạn");
+            NhanVien nhanVien2 = new NhanVien(2, "Trần Tuấn Hữu", "Nam", new Date(2019 - 1900, 8, 15), "Chuyên viên CNTT", "456 Đường B, TP.HCM", "0987654321", "Hợp đồng vô thời hạn");
+            NhanVien nhanVien3 = new NhanVien(3, "Trần Ngọc Bích", "Nữ", new Date(2021 - 1900, 3, 10), "Nhân viên bán hàng" , "789 Đường C, Đà Nẵng", "0345678912", "Hợp đồng dịch vụ");
+            NhanVien nhanVien4 = new NhanVien(4, "Nguyễn Hoàng Nam", "Nam", new Date(2018 - 1900, 9, 12), "Phó phòng" , "101 Đường D, Cần Thơ", "0765432198", "Hợp đồng vô thời hạn" );
+            NhanVien nhanVien5 = new NhanVien(5, "Đỗ Đức Độ", "Nam", new Date(2022 - 1900, 7, 20), "Nhân viên kho" , "202 Đường E, Hải Phòng", "0567891234", "Hợp đồng 1 năm" );
 
             NhaPhanPhoi nhaPhanPhoi1 = new NhaPhanPhoi(1, "Công ty TNHH XYZ", "123 Đường A, Hà Nội", "0123456789", "xyz@gmail.com", "Nha phân phối chính thức");
             NhaPhanPhoi nhaPhanPhoi2 = new NhaPhanPhoi(2, "Công ty ABC", "456 Đường B, TP.HCM", "0987654321", "abc@outlook.com", "Đối tác lâu dài");
@@ -450,6 +450,7 @@ Db4Obj {
 
             // Lưu đối tượng vào DB
             db.store(os); // Thực hiện lưu trữ với db4o
+            System.out.println("Thực hiện lưu trữ  thành công!");
         } catch (Exception e) {
             e.printStackTrace();
             System.err.println("Lỗi khi thêm bản ghi: " + e.getMessage());

@@ -1,12 +1,15 @@
 package View;
 
-import Model.KhachHang;
+import static Model.Db4Obj.AddRecord;
+import static Model.Db4Obj.DeleteRecord;
 import static Model.Db4Obj.ListAllDuLieu;
+import static Model.Db4Obj.UpdateRecord;
 
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.Date;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 import javax.swing.GroupLayout;
@@ -18,14 +21,15 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.text.StringContent;
 
 import com.formdev.flatlaf.FlatClientProperties;
 
 import Model.KhachHang;
-import Model.NhanVien;
-import Model.SanPham;
+
+
 public class QuanLyKhachHang extends javax.swing.JPanel {
 	private JTable table;
     private JPanel panel1;
@@ -33,6 +37,8 @@ public class QuanLyKhachHang extends javax.swing.JPanel {
     private JTextField tfID, tfName, tfGioiTinh,tfNgaySinh,tfType,tfDiaChi,tfMobile,tfGhiChu ;
     private JButton btnAdd, btnUpdate, btnDelete;
     private DefaultTableModel model;
+    private String pattern = "dd/MM/yyyy";
+    private DateFormat df = new SimpleDateFormat(pattern);
     
     public QuanLyKhachHang() {
 		// TODO Auto-generated constructor stub
@@ -79,7 +85,7 @@ public class QuanLyKhachHang extends javax.swing.JPanel {
          // Cập nhật thông tin của từng sản phẩm vào mảng 2 chiều data
             data[i][0] = sp.getMaKhachHang();
             data[i][1] = sp.getTenKhachHang();
-            data[i][2] = sp.getNgaySinh();
+            data[i][2] = df.format(sp.getNgaySinh());
             data[i][3] = sp.getGioiTinh();
             data[i][4] = sp.getDiaChi();
             data[i][5] = sp.getSDT();
@@ -118,6 +124,26 @@ public class QuanLyKhachHang extends javax.swing.JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 deleteKhachHang();
+            }
+        });
+        
+     // Lắng nghe sự kiện chọn hàng trong bảng
+        table.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                if (!e.getValueIsAdjusting()) {
+                    int selectedRow = table.getSelectedRow();
+                    if (selectedRow != -1) {
+                        tfID.setText(model.getValueAt(selectedRow, 0).toString());
+                        tfName.setText(model.getValueAt(selectedRow, 1).toString());
+                        tfNgaySinh.setText(model.getValueAt(selectedRow, 2).toString());
+                        tfGioiTinh.setText(model.getValueAt(selectedRow, 3).toString());
+                        tfDiaChi.setText(model.getValueAt(selectedRow, 4).toString());
+                        tfMobile.setText(model.getValueAt(selectedRow, 5).toString());
+                        tfType.setText(model.getValueAt(selectedRow, 6).toString());
+                        tfGhiChu.setText(model.getValueAt(selectedRow, 7).toString());
+                    }
+                }
             }
         });
 
@@ -219,12 +245,23 @@ public class QuanLyKhachHang extends javax.swing.JPanel {
         String sex = tfGioiTinh.getText();
         String address = tfDiaChi.getText();
         int mobile = Integer.parseInt(tfMobile.getText().trim());
+        String mobileNumber = tfMobile.getText().trim();
         String type = tfType.getText();
         String note = tfGhiChu.getText();
         
+        java.util.Date dateOfBirth = null;
 
+        try {
+        	dateOfBirth = (java.util.Date) df.parse(date);
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         if (!id.isEmpty() && !name.isEmpty() && !sex.isEmpty() && !date.isEmpty() && !type.isEmpty()) {
             model.addRow(new Object[]{id, name, date, sex, address, mobile, type, note});
+            
+            KhachHang khachHang = new KhachHang(Integer.parseInt(id), name, dateOfBirth , sex, address, mobileNumber ,type, note);
+            AddRecord(khachHang, "KhachHang");
             clearFields();
         } else {
             JOptionPane.showMessageDialog(this, "Vui lòng nhập đầy đủ thông tin!");
@@ -240,19 +277,48 @@ public class QuanLyKhachHang extends javax.swing.JPanel {
             String sex = tfGioiTinh.getText();
             String address = tfDiaChi.getText();
             int mobile = Integer.parseInt(tfMobile.getText().trim());
+            String mobileNumber = tfMobile.getText().trim();
             String type = tfType.getText();
             String note = tfGhiChu.getText();
+            DateFormat df = new SimpleDateFormat(pattern); 
+            java.util.Date dateOfBirth = null;
+
+            try {
+            	dateOfBirth = (java.util.Date) df.parse(date);
+                
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
 
             if (!id.isEmpty() && !name.isEmpty() && !sex.isEmpty()) {
-                model.setValueAt(id, selectedRow, 0);
-                model.setValueAt(name, selectedRow, 1);
-                model.setValueAt(date, selectedRow, 2);
-                model.setValueAt(sex, selectedRow, 3);
-                model.setValueAt(address, selectedRow, 4);
-                model.setValueAt(mobile, selectedRow, 5);
-                model.setValueAt(type, selectedRow, 6);
-                model.setValueAt(note, selectedRow, 7);
-                clearFields();
+            	
+            	int confirm = JOptionPane.showConfirmDialog(
+                        this,
+                        "Bạn có chắc chắn muốn sửa khách hàng đã chọn?",
+                        "Xác nhận",
+                        JOptionPane.YES_NO_OPTION
+                );
+            	
+            	if (confirm == JOptionPane.YES_OPTION) {
+                    // Xử lý xóa sản phẩm tại đây
+            		model.removeRow(selectedRow);
+            		model.setValueAt(id, selectedRow, 0);
+                    model.setValueAt(name, selectedRow, 1);
+                    model.setValueAt(df.format(dateOfBirth), selectedRow, 2);
+                    model.setValueAt(sex, selectedRow, 3);
+                    model.setValueAt(address, selectedRow, 4);
+                    model.setValueAt(mobile, selectedRow, 5);
+                    model.setValueAt(type, selectedRow, 6);
+                    model.setValueAt(note, selectedRow, 7);
+                    
+                    KhachHang khachHang = new KhachHang(Integer.parseInt(id), name, dateOfBirth , sex, address, mobileNumber ,type, note);
+
+                    System.out.println(khachHang);
+
+                    UpdateRecord(khachHang, "KhachHang", "MaKhachHang", Integer.parseInt(id));
+                    clearFields();
+            	
+                
             } else {
                 JOptionPane.showMessageDialog(this, "Vui lòng nhập đầy đủ thông tin!");
             }
@@ -260,13 +326,43 @@ public class QuanLyKhachHang extends javax.swing.JPanel {
             JOptionPane.showMessageDialog(this, "Vui lòng chọn sản phẩm cần sửa!");
         }
     }
+  }
+    
+    //private void deleteKhachHang() {
+    //  int selectedRow = table.getSelectedRow();
+    //  if (selectedRow != -1) {
+    //      model.removeRow(selectedRow);
+            
+    //      String id = tfID.getText();
+            
+    //      DeleteRecord("KhachHang", "MaKhachHang", Integer.parseInt(id));
+            
+    //  } else {
+    //      JOptionPane.showMessageDialog(this, "Vui lòng chọn sản phẩm cần xoá!");
+    //  }
+    //}
+    
     
     private void deleteKhachHang() {
         int selectedRow = table.getSelectedRow();
         if (selectedRow != -1) {
-            model.removeRow(selectedRow);
+
+            int confirm = JOptionPane.showConfirmDialog(
+                    this,
+                    "Bạn có chắc chắn muốn xoá khách hàng đã chọn?",
+                    "Xác nhận",
+                    JOptionPane.YES_NO_OPTION
+            );
+
+            if (confirm == JOptionPane.YES_OPTION) {
+                // Xử lý xóa sản phẩm tại đây
+                model.removeRow(selectedRow);
+                String id = tfID.getText();
+
+                DeleteRecord("KhachHang", "MaKhachHang", Integer.parseInt(id));
+            }
         } else {
-            JOptionPane.showMessageDialog(this, "Vui lòng chọn sản phẩm cần xoá!");
+            JOptionPane.showMessageDialog(this, "Vui lòng chọn khách hàng cần xoá!");
         }
     }
     
