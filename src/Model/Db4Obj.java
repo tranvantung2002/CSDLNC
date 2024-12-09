@@ -7,15 +7,39 @@ import com.db4o.config.EmbeddedConfiguration;
 import com.db4o.query.Query;
 
 import java.io.File;
+import java.lang.reflect.Field;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
-public class Db4Obj {
+public class
+Db4Obj {
     public static final String DBNAME = "QuanLyBanHang";
     private static final int OBJECT_GRAPH_DEPTH = 3;
     private static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
     public static ObjectContainer db = null;
+    private static final Map<String, Class<?>> typeMapping = new HashMap<>();
+
+    static {
+        // Đăng ký tất cả các kiểu dữ liệu
+        typeMapping.put("ChiTietHoaDon", ChiTietHoaDon.class);
+        typeMapping.put("ChiTietPhieuNhap", ChiTietPhieuNhap.class);
+        typeMapping.put("ChucVu", ChucVu.class);
+        typeMapping.put("HangSanXuat", HangSanXuat.class);
+        typeMapping.put("HoaDon", HoaDon.class);
+        typeMapping.put("KhachHang", KhachHang.class);
+        typeMapping.put("LoaiKhachHang", LoaiKhachHang.class);
+        typeMapping.put("LoaiSanPham", LoaiSanPham.class);
+        typeMapping.put("NhanVien", NhanVien.class);
+        typeMapping.put("NhaPhanPhoi", NhaPhanPhoi.class);
+        typeMapping.put("PhieuNhap", PhieuNhap.class);
+        typeMapping.put("SanPham", SanPham.class);
+        typeMapping.put("Users", Users.class);
+    }
+
 
     // Hàm khởi tạo Database
     public static void KhoiTaoDB() {
@@ -36,42 +60,50 @@ public class Db4Obj {
         }
     }
 
-    public static ObjectSet TruyVanSODA(String tenTruong, String giaTri, String type, String operator) {
+    public static ObjectSet TruyVanSODA(String tenTruong, String giaTri, String type, String typeValue, String operator) {
         // Khởi tạo Query
         Query query = db.query();
 
-        if (type.equals("ChiTietHoaDon")) {
-            query.descend(tenTruong).constrain(giaTri);
-        } else if (type.equals("ChiTietPhieuNhap")) {
-            query.constrain(ChiTietPhieuNhap.class);
-        } else if (type.equals("ChucVu")) {
-            query.constrain(ChucVu.class);
-        } else if (type.equals("HangSanXuat")) {
-            query.constrain(HangSanXuat.class);
-        } else if (type.equals("HoaDon")) {
-            query.constrain(HoaDon.class);
-        } else if (type.equals("KhachHang")) {
-            query.constrain(KhachHang.class);
-        } else if (type.equals("LoaiKhachHang")) {
-            query.constrain(LoaiKhachHang.class);
-        } else if (type.equals("LoaiSanPham")) {
-            query.constrain(LoaiSanPham.class);
-        } else if (type.equals("NhanVien")) {
-            query.constrain(NhanVien.class);
-        } else if (type.equals("NhanPhanPhoi")) {
-            query.constrain(NhaPhanPhoi.class);
-        } else if (type.equals("PhieuNhap")) {
-            query.constrain(PhieuNhap.class);
-        } else if (type.equals("SanPham")) {
-            query.constrain(SanPham.class);
-        } else if (type.equals("Users")) {
-            query.constrain(Users.class);
+        // Ép kiểu giá trị theo `typeValue`
+        Object valueValidate;
+        try {
+            if (typeValue.equals("int")) {
+                valueValidate = Integer.parseInt(giaTri);
+            } else if (typeValue.equals("double")) {
+                valueValidate = Double.parseDouble(giaTri);
+            } else if (typeValue.equals("datetime")) {
+                valueValidate = dateFormat.parse(giaTri);
+            } else {
+                valueValidate = giaTri;
+            }
+        } catch (ParseException e) {
+            throw new IllegalArgumentException("Định dạng datetime không hợp lệ. Vui lòng sử dụng: yyyy-MM-dd HH:mm:ss");
         }
-        query.descend(tenTruong).constrain(giaTri);
+
+        // Tìm lớp tương ứng từ `typeMapping`
+        Class<?> clazz = typeMapping.get(type);
+        if (clazz == null) {
+            throw new IllegalArgumentException("Loại không hợp lệ: " + type);
+        }
+
+        // Ánh xạ lớp vào truy vấn
+        query.constrain(clazz);
+
+        // Thêm điều kiện lọc
+        if ("=".equals(operator)) {
+            query.descend(tenTruong).constrain(valueValidate);
+        } else if ("!=".equals(operator)) {
+            query.descend(tenTruong).constrain(valueValidate).not();
+        } else if (">".equals(operator)) {
+            query.descend(tenTruong).constrain(valueValidate).greater();
+        } else if ("<".equals(operator)) {
+            query.descend(tenTruong).constrain(valueValidate).smaller();
+        } else {
+            throw new IllegalArgumentException("Toán tử không hợp lệ: " + operator);
+        }
 
         // Thực thi truy vấn
-        ObjectSet objectSet = query.execute();
-        return objectSet;
+        return query.execute();
     }
 
     public static void KhoiTaoDuLieu() {
@@ -272,46 +304,38 @@ public class Db4Obj {
         }
     }
 
-    public static void UpdateNguoiBenh(ObjectSet os, String tenTruong, String giaTri, String type) {
+    public static void UpdateRecord(Object newObj, String type, String tenTruong, int id) {
         try {
+            // Truy vấn để lấy bản ghi cần cập nhật
+            ObjectSet os = TruyVanSODA(tenTruong, String.valueOf(id), type, "int", "=");
 
-            for (Object object : os) {
-//                Patient patient = (Patient) object;
-//                if (tenTruong == "name") {
-//                    patient.setName(giaTri);
-//                } else if (tenTruong == "age") {
-//                    patient.setAge(Integer.parseInt(giaTri));
-//                }
-//
-//                if (type == "COVIDPatient") {
-//                    COVIDPatient covidPatient = (COVIDPatient) patient;
-//                    if (tenTruong == "quarantineDays") {
-//                        covidPatient.setQuarantineDays(Integer.parseInt(giaTri));
-//                    }
-//                    db.store(covidPatient);
-//                } else {
-//                    db.store(patient);
-//                }
-            }
+            if (os.size() > 0) {
+                for (Object oldObj : os) {
+                    Class<?> clazz = oldObj.getClass();
 
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
-    }
+                    // Lấy tất cả các trường từ lớp của đối tượng
+                    Field[] fields = clazz.getDeclaredFields();
 
-    public static void DeleteDuLieu(ObjectSet os, String type) {
-        try {
-            for (Object object : os) {
-                if (type == "patient") {
-//                    Patient patient = (Patient) object;
-//                    for (Disease disease : patient.getDiseaseList()) {
-//                        db.delete(disease);
-//                    }
+                    for (Field field : fields) {
+                        field.setAccessible(true); // Cho phép truy cập các trường private
+
+                        // Lấy giá trị từ đối tượng mới
+                        Object newValue = field.get(newObj);
+
+                        // Gán giá trị mới vào đối tượng cũ
+                        field.set(oldObj, newValue);
+                    }
+
+                    // Lưu đối tượng đã được cập nhật
+                    db.store(oldObj);
+                    System.out.println("Cập nhật thành công!");
                 }
-                db.delete(object);
+            } else {
+                System.out.println("Không tìm thấy bản ghi với id: " + id);
             }
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
+            System.err.println("Lỗi khi cập nhật bản ghi: " + e.getMessage());
         }
     }
 
@@ -392,5 +416,39 @@ public class Db4Obj {
         }
 
         return result;
+    }
+
+    public static void DeleteRecord(String type, String tenTruong, int id) {
+
+        ObjectSet os = TruyVanSODA(tenTruong, String.valueOf(id), type, "int", "=");
+
+        try {
+            for (Object object : os) {
+                db.delete(object);
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public static void AddRecord(Object os, String type) {
+        try {
+            // Kiểm tra xem kiểu có hợp lệ không
+            Class<?> expectedClass = typeMapping.get(type);
+            if (expectedClass == null) {
+                throw new IllegalArgumentException("Loại không hợp lệ: " + type);
+            }
+
+            // Kiểm tra nếu `os` là instance của kiểu mong đợi
+            if (!expectedClass.isInstance(os)) {
+                throw new IllegalArgumentException("Đối tượng không đúng kiểu: " + os.getClass().getName());
+            }
+
+            // Lưu đối tượng vào DB
+            db.store(os); // Thực hiện lưu trữ với db4o
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.err.println("Lỗi khi thêm bản ghi: " + e.getMessage());
+        }
     }
 }

@@ -12,7 +12,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
-import static Model.Db4Obj.ListAllDuLieu;
+import static Model.Db4Obj.*;
 
 public class QuanLySanPham extends javax.swing.JPanel {
     private JTable table;
@@ -240,12 +240,25 @@ public class QuanLySanPham extends javax.swing.JPanel {
 
 
     private void addProduct() {
-        String id = tfID.getText();
+        int id = Integer.parseInt(tfID.getText());
         String name = tfName.getText();
-        String age = tfLoaiSp.getText();
+        int loaiSp = Integer.parseInt(tfLoaiSp.getText());
 
-        if (!id.isEmpty() && !name.isEmpty() && !age.isEmpty()) {
-            model.addRow(new Object[]{id, name, age});
+        int hang = Integer.parseInt(tfHang.getText());
+        Float giaNhap = Float.parseFloat(tfGiaNhap.getText());
+        Float giaBan = Float.parseFloat(tfGiaBan.getText());
+        int tonKho = Integer.parseInt(tfTonKho.getText());
+        int trangThai = Integer.parseInt(tfTrangThai.getText());
+        String blod = tfBlob.getText();
+        String chuThich = tfChuThich.getText();
+
+        if (!String.valueOf(id).isEmpty() && !name.isEmpty() && !String.valueOf(loaiSp).isEmpty()) {
+            model.addRow(new Object[]{id, name, loaiSp});
+
+            SanPham sanPham = new SanPham(id, name, loaiSp, hang, giaNhap, giaBan, tonKho, trangThai, blod, chuThich);
+
+            AddRecord(sanPham, "SanPham");
+
             clearFields();
         } else {
             JOptionPane.showMessageDialog(this, "Vui lòng nhập đầy đủ thông tin!");
@@ -255,15 +268,41 @@ public class QuanLySanPham extends javax.swing.JPanel {
     private void updateProduct() {
         int selectedRow = table.getSelectedRow();
         if (selectedRow != -1) {
-            String id = tfID.getText();
+            int id = Integer.parseInt(tfID.getText());
             String name = tfName.getText();
-            String age = tfLoaiSp.getText();
+            int loaiSp = Integer.parseInt(tfLoaiSp.getText());
 
-            if (!id.isEmpty() && !name.isEmpty() && !age.isEmpty()) {
-                model.setValueAt(id, selectedRow, 0);
-                model.setValueAt(name, selectedRow, 1);
-                model.setValueAt(age, selectedRow, 2);
-                clearFields();
+            int hang = Integer.parseInt(tfHang.getText());
+            Float giaNhap = Float.parseFloat(tfGiaNhap.getText());
+            Float giaBan = Float.parseFloat(tfGiaBan.getText());
+            int tonKho = Integer.parseInt(tfTonKho.getText());
+            int trangThai = Integer.parseInt(tfTrangThai.getText());
+            String blod = tfBlob.getText();
+            String chuThich = tfChuThich.getText();
+
+            if (!String.valueOf(id).isEmpty() && !name.isEmpty() && !String.valueOf(loaiSp).isEmpty()) {
+
+                int confirm = JOptionPane.showConfirmDialog(
+                        this,
+                        "Bạn có chắc chắn muốn sửa sản phẩm đã chọn?",
+                        "Xác nhận",
+                        JOptionPane.YES_NO_OPTION
+                );
+
+                if (confirm == JOptionPane.YES_OPTION) {
+                    // Xử lý xóa sản phẩm tại đây
+                    model.removeRow(selectedRow);
+                    model.setValueAt(id, selectedRow, 0);
+                    model.setValueAt(name, selectedRow, 1);
+                    model.setValueAt(loaiSp, selectedRow, 2);
+
+                    SanPham sanPham = new SanPham(id, name, loaiSp, hang, giaNhap, giaBan, tonKho, trangThai, blod, chuThich);
+
+                    System.out.println(sanPham);
+
+                    UpdateRecord(sanPham, "SanPham", "MaSanPham", id);
+                    clearFields();
+                }
             } else {
                 JOptionPane.showMessageDialog(this, "Vui lòng nhập đầy đủ thông tin!");
             }
@@ -275,7 +314,21 @@ public class QuanLySanPham extends javax.swing.JPanel {
     private void deleteProduct() {
         int selectedRow = table.getSelectedRow();
         if (selectedRow != -1) {
-            model.removeRow(selectedRow);
+
+            int confirm = JOptionPane.showConfirmDialog(
+                    this,
+                    "Bạn có chắc chắn muốn xoá sản phẩm đã chọn?",
+                    "Xác nhận",
+                    JOptionPane.YES_NO_OPTION
+            );
+
+            if (confirm == JOptionPane.YES_OPTION) {
+                // Xử lý xóa sản phẩm tại đây
+                model.removeRow(selectedRow);
+                String id = tfID.getText();
+
+                DeleteRecord("SanPham", "MaSanPham", Integer.parseInt(id));
+            }
         } else {
             JOptionPane.showMessageDialog(this, "Vui lòng chọn sản phẩm cần xoá!");
         }
