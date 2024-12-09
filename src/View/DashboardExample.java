@@ -20,11 +20,11 @@ public class DashboardExample extends JFrame implements ActionListener {
 
         // Tạo panel menu cố định bên trái
         menuPanel = new JPanel();
-        menuPanel.setLayout(new GridLayout(5, 1)); // Chia lưới các nút theo cột
+        menuPanel.setLayout(new GridLayout(6, 1)); // Thêm một dòng cho Quản lý loại sản phẩm
         menuPanel.setPreferredSize(new Dimension(200, 0));
 
         // Tạo các nút trong menu và gắn sự kiện
-        String[] menuItems = {"Home", "Profile", "Settings", "Help", "Logout"};
+        String[] menuItems = {"Home", "Profile", "Settings", "Help", "Logout", "Quản lý loại sản phẩm"};
         for (String item : menuItems) {
             JButton button = new JButton(item);
             button.addActionListener(this);
@@ -43,6 +43,7 @@ public class DashboardExample extends JFrame implements ActionListener {
         contentPanel.add(new JLabel("Application Settings"), "Settings");
         contentPanel.add(new JLabel("Help and Support"), "Help");
         contentPanel.add(new JLabel("Logout Screen"), "Logout");
+        contentPanel.add(new QuanLyLoaiSanPham(), "Quản lý loại sản phẩm"); // Thêm QuanLyLoaiSanPham vào CardLayout
 
         // Sắp xếp bố cục chính của JFrame với menu bên trái và content bên phải
         getContentPane().setLayout(new BorderLayout());
