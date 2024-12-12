@@ -112,7 +112,19 @@ public class MainForm extends JLayeredPane {
                     Application.showForm(new QuanLyChiTietHoaDon());
                 }
             } else if (index == 7) {
-
+                if (subIndex == 1) {
+                    Application.showForm(new BaoCaoDoanhThuTheoQuy());
+                } else if (subIndex == 2) {
+                    Application.showForm(new BaoCaoDoanhThuTheoSanPham());
+                } else if (subIndex == 3) {
+                    Application.showForm(new BaoCaoLoiNhuan());
+                } else if (subIndex == 4) {
+                    Application.showForm(new BaoCaoNhapHang());
+                } else if (subIndex == 5) {
+                    Application.showForm(new BaoCaoKhachHangTheoLoai());
+                } else if (subIndex == 6) {
+                    Application.showForm(new BaoCaoTonKho());
+                }
             } else if (index == 9) {
                 Application.logout();
             } else {

@@ -110,11 +110,11 @@ Db4Obj {
     public static void KhoiTaoDuLieu() {
         try {
 
-            ChiTietHoaDon chiTietHoaDon1 = new ChiTietHoaDon(1, 1001, 501, 5, 1500.0f, "Khuyến mãi 10%");
-            ChiTietHoaDon chiTietHoaDon2 = new ChiTietHoaDon(2, 1002, 502, 3, 750.0f, "Mua 2 tặng 1");
-            ChiTietHoaDon chiTietHoaDon3 = new ChiTietHoaDon(3, 1003, 503, 7, 2100.0f, "Hóa đơn lớn");
-            ChiTietHoaDon chiTietHoaDon4 = new ChiTietHoaDon(4, 1004, 504, 1, 300.0f, "Khách VIP");
-            ChiTietHoaDon chiTietHoaDon5 = new ChiTietHoaDon(5, 1005, 505, 10, 5000.0f, "Đơn hàng đặc biệt");
+            ChiTietHoaDon chiTietHoaDon1 = new ChiTietHoaDon(1, 1001, 101, 5, 1500.0f, "Khuyến mãi 10%");
+            ChiTietHoaDon chiTietHoaDon2 = new ChiTietHoaDon(2, 1002, 102, 3, 750.0f, "Mua 2 tặng 1");
+            ChiTietHoaDon chiTietHoaDon3 = new ChiTietHoaDon(3, 1003, 103, 7, 2100.0f, "Hóa đơn lớn");
+            ChiTietHoaDon chiTietHoaDon4 = new ChiTietHoaDon(4, 1004, 104, 1, 300.0f, "Khách VIP");
+            ChiTietHoaDon chiTietHoaDon5 = new ChiTietHoaDon(5, 1005, 105, 10, 5000.0f, "Đơn hàng đặc biệt");
 
 
             ChiTietPhieuNhap chiTietPhieuNhap1 = new ChiTietPhieuNhap(1, 2001, 601, 50, 5000.0f, "Nhập hàng đợt 1");
