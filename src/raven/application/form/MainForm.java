@@ -125,6 +125,10 @@ public class MainForm extends JLayeredPane {
                 } else if (subIndex == 6) {
                     Application.showForm(new BaoCaoTonKho());
                 }
+            } else if (index == 8) {
+                if (subIndex == 1) {
+                    Application.showForm(new QuanLyNguoiDung());
+                }
             } else if (index == 9) {
                 Application.logout();
             } else {
