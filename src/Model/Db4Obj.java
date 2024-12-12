@@ -10,10 +10,7 @@ import java.io.File;
 import java.lang.reflect.Field;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class
 Db4Obj {
@@ -113,11 +110,11 @@ Db4Obj {
     public static void KhoiTaoDuLieu() {
         try {
 
-            ChiTietHoaDon chiTietHoaDon1 = new ChiTietHoaDon(1, 1001, 501, 5, 1500.0f, "Khuyến mãi 10%");
-            ChiTietHoaDon chiTietHoaDon2 = new ChiTietHoaDon(2, 1002, 502, 3, 750.0f, "Mua 2 tặng 1");
-            ChiTietHoaDon chiTietHoaDon3 = new ChiTietHoaDon(3, 1003, 503, 7, 2100.0f, "Hóa đơn lớn");
-            ChiTietHoaDon chiTietHoaDon4 = new ChiTietHoaDon(4, 1004, 504, 1, 300.0f, "Khách VIP");
-            ChiTietHoaDon chiTietHoaDon5 = new ChiTietHoaDon(5, 1005, 505, 10, 5000.0f, "Đơn hàng đặc biệt");
+            ChiTietHoaDon chiTietHoaDon1 = new ChiTietHoaDon(1, 1001, 101, 5, 1500.0f, "Khuyến mãi 10%");
+            ChiTietHoaDon chiTietHoaDon2 = new ChiTietHoaDon(2, 1002, 102, 3, 750.0f, "Mua 2 tặng 1");
+            ChiTietHoaDon chiTietHoaDon3 = new ChiTietHoaDon(3, 1003, 103, 7, 2100.0f, "Hóa đơn lớn");
+            ChiTietHoaDon chiTietHoaDon4 = new ChiTietHoaDon(4, 1004, 104, 1, 300.0f, "Khách VIP");
+            ChiTietHoaDon chiTietHoaDon5 = new ChiTietHoaDon(5, 1005, 105, 10, 5000.0f, "Đơn hàng đặc biệt");
 
 
             ChiTietPhieuNhap chiTietPhieuNhap1 = new ChiTietPhieuNhap(1, 2001, 601, 50, 5000.0f, "Nhập hàng đợt 1");
@@ -138,11 +135,43 @@ Db4Obj {
             HangSanXuat hangSanXuat4 = new HangSanXuat(4, "Xiaomi");
             HangSanXuat hangSanXuat5 = new HangSanXuat(5, "Dell");
 
-            HoaDon hoaDon1 = new HoaDon(1001, 201, 301, new Date(), 1500.0f, "Mua hàng đợt 1");
-            HoaDon hoaDon2 = new HoaDon(1002, 202, 302, new Date(), 2500.0f, "Khuyến mãi dịp lễ");
-            HoaDon hoaDon3 = new HoaDon(1003, 203, 303, new Date(), 3500.0f, "Đơn hàng lớn");
-            HoaDon hoaDon4 = new HoaDon(1004, 204, 304, new Date(), 4500.0f, "Khách hàng thân thiết");
-            HoaDon hoaDon5 = new HoaDon(1005, 205, 305, new Date(), 5500.0f, "Thanh toán trực tiếp");
+            // Tạo đối tượng Calendar để thay đổi ngày lập hóa đơn
+            Calendar cal = Calendar.getInstance();
+
+            List<HoaDon> hoaDons = new ArrayList<>();
+// Tháng 1
+            cal.set(2024, Calendar.JANUARY, 15);
+            hoaDons.add(new HoaDon(1001, 201, 301, cal.getTime(), 1500.0f, "Mua hàng đợt 1"));
+
+// Tháng 2
+            cal.set(2024, Calendar.FEBRUARY, 10);
+            hoaDons.add(new HoaDon(1002, 202, 302, cal.getTime(), 2500.0f, "Khuyến mãi dịp lễ"));
+
+// Tháng 3
+            cal.set(2024, Calendar.MARCH, 20);
+            hoaDons.add(new HoaDon(1003, 203, 303, cal.getTime(), 3500.0f, "Đơn hàng lớn"));
+
+// Tháng 4
+            cal.set(2024, Calendar.APRIL, 25);
+            hoaDons.add(new HoaDon(1004, 204, 304, cal.getTime(), 4500.0f, "Khách hàng thân thiết"));
+
+// Tháng 5
+            cal.set(2024, Calendar.MAY, 5);
+            hoaDons.add(new HoaDon(1005, 205, 305, cal.getTime(), 5500.0f, "Thanh toán trực tiếp"));
+
+// Tháng 6
+            cal.set(2024, Calendar.JUNE, 12);
+            hoaDons.add(new HoaDon(1006, 206, 306, cal.getTime(), 2200.0f, "Khuyến mãi mùa hè"));
+
+// Tháng 7
+            cal.set(2024, Calendar.JULY, 18);
+            hoaDons.add(new HoaDon(1007, 207, 307, cal.getTime(), 3300.0f, "Giảm giá giữa năm"));
+
+// Tháng 8
+            cal.set(2024, Calendar.AUGUST, 30);
+
+            hoaDons.add(new HoaDon(1008, 208, 308, cal.getTime(), 4100.0f, "Đơn hàng VIP"));
+
 
             KhachHang khachHang1 = new KhachHang(001, "Nguyễn Văn A" , new Date(1990 - 1900, 5, 15), "Nam", "123 Đường ABC, Hà Nội", "0123456789", "Thường", "Khách hàng mới");
             KhachHang khachHang2 = new KhachHang(002, "Trần Thị B", new Date(1985 - 1900, 10, 20), "Nữ", "456 Đường DEF, TP.HCM", "0987654321", "VIP", "Thành viên lâu năm");
@@ -186,7 +215,7 @@ Db4Obj {
             SanPham sanPham4 = new SanPham(104, "Xiaomi Mi 11", 1, 3, 8000.0f, 9500.0f, 200, 1, "imageData4", "Điện thoại Xiaomi");
             SanPham sanPham5 = new SanPham(105, "Smart TV LG 55 inch", 4, 4, 12000.0f, 15000.0f, 30, 1, "imageData5", "Tivi LG");
 
-            Users user1 = new Users(1, 301, "tung123", "password123", 1, "Quản trị viên");
+            Users user1 = new Users(1, 301, "tung", "123", 1, "Quản trị viên");
             Users user2 = new Users(2, 302, "trang456", "password456", 2, "Nhân viên bán hàng");
             Users user3 = new Users(3, 303, "hoang789", "password789", 3, "Nhân viên kho");
             Users user4 = new Users(4, 304, "anhduong101", "password101", 2, "Trưởng phòng IT");
@@ -200,11 +229,7 @@ Db4Obj {
             db.store(chiTietHoaDon5);
 
 // Lưu HoaDon
-            db.store(hoaDon1);
-            db.store(hoaDon2);
-            db.store(hoaDon3);
-            db.store(hoaDon4);
-            db.store(hoaDon5);
+            hoaDons.forEach(hoaDon -> db.store(hoaDon));
 
 // Lưu KhachHang
             db.store(khachHang1);
@@ -288,172 +313,75 @@ Db4Obj {
     }
 
     // Update Dữ liệu
-    public static void UpdateDuLieuBenh(ObjectSet os, String tenTruong, String giaTri) {
-        try {
-
-            for (Object object : os) {
-//                Disease disease = (Disease) object;
-//                if (tenTruong == "diseaseName") {
-//                    disease.setDiseaseName(giaTri);
-//                } else if (tenTruong == "diagnosisDate") {
-//                    disease.setDiagnosisDate(dateFormat.parse(giaTri));
-//                } else if (tenTruong == "severity") {
-//                    disease.setSeverity(Integer.parseInt(giaTri));
-//                }
-//                db.store(disease);
-            }
-
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
-    }
-
     public static void UpdateRecord(Object newObj, String type, String tenTruong, int id) {
         try {
-            // Truy vấn để lấy bản ghi cần cập nhật
             ObjectSet os = TruyVanSODA(tenTruong, String.valueOf(id), type, "int", "=");
 
             if (os.size() > 0) {
                 for (Object oldObj : os) {
                     Class<?> clazz = oldObj.getClass();
-
-                    // Lấy tất cả các trường từ lớp của đối tượng
                     Field[] fields = clazz.getDeclaredFields();
 
                     for (Field field : fields) {
-                        field.setAccessible(true); // Cho phép truy cập các trường private
-
-                        // Lấy giá trị từ đối tượng mới
+                        field.setAccessible(true);
                         Object newValue = field.get(newObj);
-
-                        // Gán giá trị mới vào đối tượng cũ
                         field.set(oldObj, newValue);
                     }
 
-                    // Lưu đối tượng đã được cập nhật
                     db.store(oldObj);
-                    System.out.println("Cập nhật thành công!");
                 }
             } else {
                 System.out.println("Không tìm thấy bản ghi với id: " + id);
             }
         } catch (Exception e) {
             e.printStackTrace();
-            System.err.println("Lỗi khi cập nhật bản ghi: " + e.getMessage());
         }
     }
 
     public static ArrayList<Object> ListAllDuLieu(String type) {
         ArrayList<Object> result = new ArrayList<>();
+        Class<?> clazz = typeMapping.get(type);
+
+        if (clazz == null) {
+            System.err.println("Loại không hợp lệ: " + type);
+            return result;
+        }
 
         try {
-            // Truy vấn theo loại dữ liệu và thêm vào result
-            if (type.equals("ChiTietHoaDon")) {
-                ObjectSet<ChiTietHoaDon> chiTietHoaDons = db.query(ChiTietHoaDon.class);
-                while (chiTietHoaDons.hasNext()) {
-                    result.add(chiTietHoaDons.next());
-                }
-            } else if (type.equals("ChiTietPhieuNhap")) {
-                ObjectSet<ChiTietPhieuNhap> chiTietPhieuNhaps = db.query(ChiTietPhieuNhap.class);
-                while (chiTietPhieuNhaps.hasNext()) {
-                    result.add(chiTietPhieuNhaps.next());
-                }
-            } else if (type.equals("ChucVu")) {
-                ObjectSet<ChucVu> chucVus = db.query(ChucVu.class);
-                while (chucVus.hasNext()) {
-                    result.add(chucVus.next());
-                }
-            } else if (type.equals("HangSanXuat")) {
-                ObjectSet<HangSanXuat> hangSanXuats = db.query(HangSanXuat.class);
-                while (hangSanXuats.hasNext()) {
-                    result.add(hangSanXuats.next());
-                }
-            } else if (type.equals("HoaDon")) {
-                ObjectSet<HoaDon> hoaDons = db.query(HoaDon.class);
-                while (hoaDons.hasNext()) {
-                    result.add(hoaDons.next());
-                }
-            } else if (type.equals("KhachHang")) {
-                ObjectSet<KhachHang> khachHangs = db.query(KhachHang.class);
-                while (khachHangs.hasNext()) {
-                    result.add(khachHangs.next());
-                }
-            } else if (type.equals("LoaiKhachHang")) {
-                ObjectSet<LoaiKhachHang> loaiKhachHangs = db.query(LoaiKhachHang.class);
-                while (loaiKhachHangs.hasNext()) {
-                    result.add(loaiKhachHangs.next());
-                }
-            } else if (type.equals("LoaiSanPham")) {
-                ObjectSet<LoaiSanPham> loaiSanPhams = db.query(LoaiSanPham.class);
-                while (loaiSanPhams.hasNext()) {
-                    result.add(loaiSanPhams.next());
-                }
-            } else if (type.equals("NhanVien")) {
-                ObjectSet<NhanVien> nhanViens = db.query(NhanVien.class);
-                while (nhanViens.hasNext()) {
-                    result.add(nhanViens.next());
-                }
-            } else if (type.equals("NhaPhanPhoi")) {
-                ObjectSet<NhaPhanPhoi> nhaPhanPhois = db.query(NhaPhanPhoi.class);
-                while (nhaPhanPhois.hasNext()) {
-                    result.add(nhaPhanPhois.next());
-                }
-            } else if (type.equals("PhieuNhap")) {
-                ObjectSet<PhieuNhap> phieuNhaps = db.query(PhieuNhap.class);
-                while (phieuNhaps.hasNext()) {
-                    result.add(phieuNhaps.next());
-                }
-            } else if (type.equals("SanPham")) {
-                ObjectSet<SanPham> sanPhams = db.query(SanPham.class);
-                while (sanPhams.hasNext()) {
-                    result.add(sanPhams.next());
-                }
-            } else if (type.equals("Users")) {
-                ObjectSet<Users> users = db.query(Users.class);
-                while (users.hasNext()) {
-                    result.add(users.next());
-                }
+            ObjectSet<?> objects = db.query(clazz);
+            while (objects.hasNext()) {
+                result.add(objects.next());
             }
-
         } catch (Exception e) {
-            System.out.println(e);
+            e.printStackTrace();
         }
 
         return result;
     }
 
+    // Xóa bản ghi
     public static void DeleteRecord(String type, String tenTruong, int id) {
-
-        ObjectSet os = TruyVanSODA(tenTruong, String.valueOf(id), type, "int", "=");
-
+        ObjectSet<?> os = TruyVanSODA(tenTruong, String.valueOf(id), type, "int", "=");
         try {
             for (Object object : os) {
                 db.delete(object);
             }
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
     }
 
-    public static void AddRecord(Object os, String type) {
+    // Thêm bản ghi mới
+    public static void AddRecord(Object record, String type) {
         try {
-            // Kiểm tra xem kiểu có hợp lệ không
             Class<?> expectedClass = typeMapping.get(type);
-            if (expectedClass == null) {
-                throw new IllegalArgumentException("Loại không hợp lệ: " + type);
+            if (expectedClass == null || !expectedClass.isInstance(record)) {
+                throw new IllegalArgumentException("Loại không hợp lệ hoặc không khớp: " + type);
             }
 
-            // Kiểm tra nếu `os` là instance của kiểu mong đợi
-            if (!expectedClass.isInstance(os)) {
-                throw new IllegalArgumentException("Đối tượng không đúng kiểu: " + os.getClass().getName());
-            }
-
-            // Lưu đối tượng vào DB
-            db.store(os); // Thực hiện lưu trữ với db4o
-            System.out.println("Thực hiện lưu trữ  thành công!");
+            db.store(record);
         } catch (Exception e) {
             e.printStackTrace();
-            System.err.println("Lỗi khi thêm bản ghi: " + e.getMessage());
         }
     }
 }
