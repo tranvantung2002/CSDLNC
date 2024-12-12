@@ -312,7 +312,6 @@ Db4Obj {
 
                     // Lưu đối tượng đã được cập nhật
                     db.store(oldObj);
-                    System.out.println("Cập nhật thành công!");
                 }
             } else {
                 System.out.println("Không tìm thấy bản ghi với id: " + id);
