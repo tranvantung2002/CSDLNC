@@ -5,7 +5,6 @@ import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.extras.FlatSVGIcon;
 import com.formdev.flatlaf.util.UIScale;
 import raven.application.Application;
-import raven.application.form.other.FormDashboard;
 import raven.menu.Menu;
 import raven.menu.MenuAction;
 
@@ -65,7 +64,7 @@ public class MainForm extends JLayeredPane {
         menu.addMenuEvent((int index, int subIndex, MenuAction action) -> {
             // Application.mainForm.showForm(new DefaultForm("Form : " + index + " " + subIndex));
             if (index == 0) {
-                Application.showForm(new FormDashboard());
+                Application.showForm(new Dashboard());
             } else if (index == 1) {
                 if (subIndex == 1) {
                     Application.showForm(new QuanLySanPham());
@@ -73,11 +72,17 @@ public class MainForm extends JLayeredPane {
                     Application.showForm(new QuanLyLoaiSanPham());
                 } else if (subIndex == 3) {
                     Application.showForm(new QuanLyHangSanXuat());
+                } else if (subIndex == 4) {
+                    Application.showForm(new QuanLyChiTietPhieuNhap());
+                } else if (subIndex == 5) {
+                    Application.showForm(new QuanLyPhieuNhap());
                 } else {
                     action.cancel();
                 }
             } else if (index == 2) {
-                if (subIndex == 2) {
+                if (subIndex == 1) {
+                    Application.showForm(new QuanLyChucVu());
+                } else if (subIndex == 2) {
                     Application.showForm(new QuanLyNhanVien());
                 }
             } else if (index == 3) {
