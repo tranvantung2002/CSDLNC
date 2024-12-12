@@ -6,7 +6,6 @@ import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.data.category.DefaultCategoryDataset;
 
-import javax.swing.*;
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -56,10 +55,8 @@ public class Dashboard extends javax.swing.JPanel {
         ChartPanel chartPanel = new ChartPanel(barChart);
 
         // Hiển thị biểu đồ
-        JFrame frame = new JFrame();
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.add(chartPanel);
-        frame.setSize(800, 600);
-        frame.setVisible(true);
+        add(chartPanel);
+        setSize(800, 600);
+        setVisible(true);
     }
 }
