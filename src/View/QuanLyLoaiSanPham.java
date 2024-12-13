@@ -1,194 +1,125 @@
-package View;  //xuan
+package View;
 
 import Model.LoaiSanPham;
-import com.formdev.flatlaf.FlatClientProperties;
+import utility.RecordHandler;
 
 import javax.swing.*;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
-import javax.swing.table.DefaultTableModel;
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
-import static Model.Db4Obj.ListAllDuLieu;
+import static Model.Db4Obj.*;
 
-public class QuanLyLoaiSanPham extends javax.swing.JPanel {
-    private JTable table;
-    private JPanel panel1;
-    private JLabel lb, lblID, lblName;
-    private JTextField tfID, tfName;
-    private JButton btnAdd, btnUpdate, btnDelete;
-    private DefaultTableModel model;
+public class QuanLyLoaiSanPham extends BaseManagementPanel {
 
     public QuanLyLoaiSanPham() {
-        initComponents();
-        lb.putClientProperty(FlatClientProperties.STYLE, "font:$h1.font");
+        // Gọi super() với tiêu đề và các cột
+        super("Quản Lý Loại Sản Phẩm", new String[]{"Mã Loại Sản Phẩm", "Tên Loại Sản Phẩm"});
+
+        // Tải dữ liệu vào bảng
+        loadData(2);
     }
 
-    private void initComponents() {
-        // Tạo JLabel cho tiêu đề
-        lb = new JLabel();
-        lb.setHorizontalAlignment(SwingConstants.CENTER);
-        lb.setText("QUẢN LÝ LOẠI SẢN PHẨM");
-
-        // Tạo các JLabel cho ID, Name
-        lblID = new JLabel("Mã loại sản phẩm:");
-        lblName = new JLabel("Tên loại sản phẩm:");
-
-        // Tạo các JTextField cho ID, Name
-        tfID = new JTextField(10);
-        tfName = new JTextField(20);
-
-        // Tạo dữ liệu và cột cho JTable
-        String[] columns = {"Mã Loại Sản Phẩm", "Tên Loại Sản Phẩm"};
+    private void loadData(int columns) {
         ArrayList loaisanphams = ListAllDuLieu("LoaiSanPham");
-        Object[][] data = new Object[loaisanphams.size()][columns.length];
+        Object[][] data = new Object[loaisanphams.size()][columns];
 
         for (int i = 0; i < loaisanphams.size(); i++) {
             LoaiSanPham lsp = (LoaiSanPham) loaisanphams.get(i);
-
-            // Cập nhật thông tin của từng loại sản phẩm vào mảng 2 chiều data
-            data[i][0] = lsp.getMaLoaiSanPham();
-            data[i][1] = lsp.getTenLoaiSanPham();
+            Object[] rowData = {
+                    lsp.getMaLoaiSanPham(),
+                    lsp.getTenLoaiSanPham()
+            };
+            RecordHandler.addRecord(model, rowData);
         }
+    }
 
-        // Tạo DefaultTableModel và JTable
-        model = new DefaultTableModel(data, columns);
-        table = new JTable(model);
-
-        // Bọc JTable trong JScrollPane để có thể cuộn
-        JScrollPane scrollPane = new JScrollPane(table);
-
-        // Tạo các nút chức năng
-        btnAdd = new JButton("Thêm");
-        btnUpdate = new JButton("Sửa");
-        btnDelete = new JButton("Xoá");
-
-        // Thiết lập hành động cho các nút
+    @Override
+    protected void initializeActions() {
         btnAdd.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                addLoaiSanPham();
+                String maLoaiSanPham = JOptionPane.showInputDialog("Nhập Mã Loại Sản Phẩm:");
+                String tenLoaiSanPham = JOptionPane.showInputDialog("Nhập Tên Loại Sản Phẩm:");
+
+                if (maLoaiSanPham != null && tenLoaiSanPham != null) {
+                    Object[] rowData = {maLoaiSanPham, tenLoaiSanPham};
+                    RecordHandler.addRecord(model, rowData);
+
+                    LoaiSanPham lsp = new LoaiSanPham(Integer.parseInt(maLoaiSanPham), tenLoaiSanPham);
+                    AddRecord(lsp, "LoaiSanPham");
+                } else {
+                    JOptionPane.showMessageDialog(null, "Vui lòng nhập đầy đủ thông tin!");
+                }
             }
         });
 
         btnUpdate.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                updateLoaiSanPham();
+                int selectedRow = table.getSelectedRow();
+                if (selectedRow != -1) {
+
+                    int confirm = JOptionPane.showConfirmDialog(
+                            null,
+                            "Bạn có chắc chắn muốn sửa loại sản phẩm đã chọn?",
+                            "Xác nhận",
+                            JOptionPane.YES_NO_OPTION
+                    );
+
+                    if (confirm == JOptionPane.YES_OPTION) {
+                        String maLoaiSanPham = safeGetValue(selectedRow, 0);
+                        String tenLoaiSanPham = safeGetValue(selectedRow, 1);
+
+                        if (maLoaiSanPham != null && tenLoaiSanPham != null) {
+                            Object[] rowData = {maLoaiSanPham, tenLoaiSanPham};
+                            RecordHandler.updateRecord(model, selectedRow, rowData);
+
+                            LoaiSanPham lsp = new LoaiSanPham(Integer.parseInt(maLoaiSanPham), tenLoaiSanPham);
+                            UpdateRecord(lsp, "LoaiSanPham", "MaLoaiSanPham", Integer.parseInt(maLoaiSanPham));
+
+                            JOptionPane.showMessageDialog(null, "Sửa thành công!");
+                        } else {
+                            JOptionPane.showMessageDialog(null, "Vui lòng nhập đầy đủ thông tin!");
+                        }
+                    }
+
+                } else {
+                    JOptionPane.showMessageDialog(null, "Chọn một dòng để sửa!");
+                }
             }
         });
 
         btnDelete.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                deleteLoaiSanPham();
-            }
-        });
+                int selectedRow = table.getSelectedRow();
+                if (selectedRow != -1) {
+                    int confirm = JOptionPane.showConfirmDialog(
+                            null,
+                            "Bạn có chắc chắn muốn xoá loại sản phẩm đã chọn?",
+                            "Xác nhận",
+                            JOptionPane.YES_NO_OPTION
+                    );
 
-        // Lắng nghe sự kiện chọn hàng trong bảng
-        table.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
-            @Override
-            public void valueChanged(ListSelectionEvent e) {
-                if (!e.getValueIsAdjusting()) {
-                    int selectedRow = table.getSelectedRow();
-                    if (selectedRow != -1) {
-                        tfID.setText(model.getValueAt(selectedRow, 0).toString());
-                        tfName.setText(model.getValueAt(selectedRow, 1).toString());
+                    if (confirm == JOptionPane.YES_OPTION) {
+                        String maLoaiSanPham = safeGetValue(selectedRow, 0);
+                        if (maLoaiSanPham != null) {
+                            RecordHandler.deleteRecord(model, selectedRow);
+                            DeleteRecord("LoaiSanPham", "MaLoaiSanPham", Integer.parseInt(maLoaiSanPham));
+                        } else {
+                            JOptionPane.showMessageDialog(null, "Dữ liệu không hợp lệ để xóa!");
+                        }
                     }
+                } else {
+                    JOptionPane.showMessageDialog(null, "Chọn một dòng để xóa!");
                 }
             }
         });
-
-        // === Tổ chức bố cục ===
-        JPanel formPanel = new JPanel();
-        GroupLayout formLayout = new GroupLayout(formPanel);
-        formPanel.setLayout(formLayout);
-
-        formLayout.setHorizontalGroup(
-                formLayout.createSequentialGroup()
-                        .addGroup(formLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                                .addGroup(formLayout.createSequentialGroup()
-                                        .addComponent(lblID)
-                                        .addComponent(tfID, 150, 150, 150)
-                                        .addGap(20)
-                                        .addComponent(lblName)
-                                        .addGap(10)
-                                        .addComponent(tfName, 150, 150, 150)
-                                        .addGap(20)
-                                )
-                                .addGroup(formLayout.createSequentialGroup()
-                                        .addComponent(btnAdd)
-                                        .addGap(20)
-                                        .addComponent(btnUpdate)
-                                        .addGap(20)
-                                        .addComponent(btnDelete)))
-        );
-
-        formLayout.setVerticalGroup(
-                formLayout.createSequentialGroup()
-                        .addGroup(formLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-                                .addComponent(lblID)
-                                .addComponent(tfID)
-                                .addComponent(lblName)
-                                .addComponent(tfName)
-                        )
-                        .addGap(10)
-                        .addGroup(formLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-                                .addComponent(btnAdd)
-                                .addComponent(btnUpdate)
-                                .addComponent(btnDelete))
-        );
-
-        // Sử dụng BorderLayout để thêm bảng và form
-        setLayout(new BorderLayout());
-        add(scrollPane, BorderLayout.CENTER); // JTable ở giữa
-        add(formPanel, BorderLayout.SOUTH); // Form ở dưới
     }
 
-    private void addLoaiSanPham() {
-        String id = tfID.getText();
-        String name = tfName.getText();
-
-        if (!id.isEmpty() && !name.isEmpty()) {
-            model.addRow(new Object[]{id, name});
-            clearFields();
-        } else {
-            JOptionPane.showMessageDialog(this, "Vui lòng nhập đầy đủ thông tin!");
-        }
-    }
-
-    private void updateLoaiSanPham() {
-        int selectedRow = table.getSelectedRow();
-        if (selectedRow != -1) {
-            String id = tfID.getText();
-            String name = tfName.getText();
-
-            if (!id.isEmpty() && !name.isEmpty()) {
-                model.setValueAt(id, selectedRow, 0);
-                model.setValueAt(name, selectedRow, 1);
-                clearFields();
-            } else {
-                JOptionPane.showMessageDialog(this, "Vui lòng nhập đầy đủ thông tin!");
-            }
-        } else {
-            JOptionPane.showMessageDialog(this, "Vui lòng chọn loại sản phẩm cần sửa!");
-        }
-    }
-
-    private void deleteLoaiSanPham() {
-        int selectedRow = table.getSelectedRow();
-        if (selectedRow != -1) {
-            model.removeRow(selectedRow);
-        } else {
-            JOptionPane.showMessageDialog(this, "Vui lòng chọn loại sản phẩm cần xoá!");
-        }
-    }
-
-    private void clearFields() {
-        tfID.setText("");
-        tfName.setText("");
+    private String safeGetValue(int row, int column) {
+        Object value = model.getValueAt(row, column);
+        return value != null ? value.toString() : null;
     }
 }
