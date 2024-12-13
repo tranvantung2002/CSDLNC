@@ -26,12 +26,14 @@ public class Menu extends JPanel {
             {"~MAIN~"},
             {"Dashboard"},
             {"~WEB APP~"},
-            {"Quản lý sản phầm", "Danh sách sản phẩm"},
-            {"Quản lý loại sản phầm", "Inbox", "Read", "Compost"},
-            {"Quản lý quyền sử dụng", "Inbox", "Read", "Compost"},
-            {"Quản lý người dùng", "Inbox", "Read", "Compost"},
-            {"Quản lý nhân viên", "Inbox", "Read", "Compost"},
-            {"Báo cáo", "Inbox", "Read", "Compost"},
+            {"Quản lý sản phầm", "Danh sách sản phẩm", "Danh sách loại sản phẩm", "Danh sách hãng sản xuất", "Danh sách chi tiết phiếu nhập", "Danh sách phiếu nhập"},
+            {"Quản lý quyền hạn", "Danh sách chức vụ", "Danh sách người dùng"},
+            {"Quản lý khách hàng", "Danh sách khách hàng", "Danh sách loại khách hàng"},
+            {"Quản lý nhà phân phối", "Danh sách nhà phân phối"},
+            {"Quản lý nhân viên", "Danh sách nhân viên"},
+            {"Quản lý hoá đơn", "Danh sách hoá đơn", "Danh sách chi tiết hoá đơn"},
+            {"Báo cáo", "Báo cáo doanh thu theo quý", "Báo cáo doanh thu theo sản phẩm", "Báo cáo lợi nhuận", "Báo cáo nhập hàng", "Báo cáo theo loại", "Báo cáo tồn kho"},
+            {"Người dùng", "Danh sách người dùng"},
             {"Logout"}
     };
     private final List<MenuEvent> events = new ArrayList<>();
