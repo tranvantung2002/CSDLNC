@@ -4,6 +4,7 @@ import Model.HoaDon;
 import utility.RecordHandler;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -14,7 +15,14 @@ import static Model.Db4Obj.*;
 public class QuanLyHoaDon extends BaseManagementPanel {
     public QuanLyHoaDon() {
         // Gọi super() với tiêu đề và các cột
-        super("Quản Lý Hóa Đơn", new String[]{"Mã Hóa Đơn", "Mã Khách Hàng", "Mã Nhân Viên", "Ngày Lập Hóa Đơn", "Tổng Tiền", "Ghi Chú"});
+        super("Quản Lý Hóa Đơn", new String[]{
+                "Mã Hóa Đơn",
+                "Mã Khách Hàng",
+                "Mã Nhân Viên",
+                "Ngày Lập Hóa Đơn",
+                "Tổng Tiền",
+                "Ghi Chú"
+        });
 
         // Tải dữ liệu vào bảng
         loadData(6);
@@ -22,8 +30,6 @@ public class QuanLyHoaDon extends BaseManagementPanel {
 
     private void loadData(int columns) {
         ArrayList hoaDons = ListAllDuLieu("HoaDon");
-        Object[][] data = new Object[hoaDons.size()][columns];
-
         for (int i = 0; i < hoaDons.size(); i++) {
             HoaDon hd = (HoaDon) hoaDons.get(i);
             Object[] rowData = {
@@ -40,42 +46,96 @@ public class QuanLyHoaDon extends BaseManagementPanel {
 
     @Override
     protected void initializeActions() {
+        //=================================
+        // NÚT THÊM
+        //=================================
         btnAdd.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Hiển thị hộp thoại nhập thông tin
-                String maHoaDon = JOptionPane.showInputDialog("Nhập Mã Hóa Đơn:");
-                String maKhachHang = JOptionPane.showInputDialog("Nhập Mã Khách Hàng:");
-                String maNhanVien = JOptionPane.showInputDialog("Nhập Mã Nhân Viên:");
-                String ngayLapHoaDon = JOptionPane.showInputDialog("Nhập Ngày Lập Hóa Đơn:");
-                String tongTien = JOptionPane.showInputDialog("Nhập Tổng Tiền:");
-                String ghiChu = JOptionPane.showInputDialog("Nhập Ghi Chú:");
+                // Tạo panel nhập liệu (6 hàng, 2 cột)
+                JPanel inputPanel = new JPanel(new GridLayout(6, 2, 5, 5));
 
-                if (maHoaDon != null && maKhachHang != null && maNhanVien != null && ngayLapHoaDon != null && tongTien != null) {
-                    Object[] rowData = {maHoaDon, maKhachHang, maNhanVien, ngayLapHoaDon, tongTien, ghiChu};
-                    RecordHandler.addRecord(model, rowData);
+                JLabel lblMaHoaDon = new JLabel("Mã Hóa Đơn:");
+                JTextField tfMaHoaDon = new JTextField();
 
-                    HoaDon hd = new HoaDon(
-                            Integer.parseInt(maHoaDon),
-                            Integer.parseInt(maKhachHang),
-                            Integer.parseInt(maNhanVien),
-                            new Date(ngayLapHoaDon),
-                            Float.parseFloat(tongTien),
-                            ghiChu
-                    );
-                    AddRecord(hd, "HoaDon");
-                } else {
-                    JOptionPane.showMessageDialog(null, "Vui lòng nhập đầy đủ thông tin!");
+                JLabel lblMaKhachHang = new JLabel("Mã Khách Hàng:");
+                JTextField tfMaKhachHang = new JTextField();
+
+                JLabel lblMaNhanVien = new JLabel("Mã Nhân Viên:");
+                JTextField tfMaNhanVien = new JTextField();
+
+                JLabel lblNgayLap = new JLabel("Ngày Lập Hóa Đơn:");
+                JTextField tfNgayLap = new JTextField();
+
+                JLabel lblTongTien = new JLabel("Tổng Tiền:");
+                JTextField tfTongTien = new JTextField();
+
+                JLabel lblGhiChu = new JLabel("Ghi Chú:");
+                JTextField tfGhiChu = new JTextField();
+
+                // Thêm label và textfield vào panel
+                inputPanel.add(lblMaHoaDon);
+                inputPanel.add(tfMaHoaDon);
+                inputPanel.add(lblMaKhachHang);
+                inputPanel.add(tfMaKhachHang);
+                inputPanel.add(lblMaNhanVien);
+                inputPanel.add(tfMaNhanVien);
+                inputPanel.add(lblNgayLap);
+                inputPanel.add(tfNgayLap);
+                inputPanel.add(lblTongTien);
+                inputPanel.add(tfTongTien);
+                inputPanel.add(lblGhiChu);
+                inputPanel.add(tfGhiChu);
+
+                int result = JOptionPane.showConfirmDialog(
+                        null,
+                        inputPanel,
+                        "Nhập thông tin Hóa Đơn",
+                        JOptionPane.OK_CANCEL_OPTION,
+                        JOptionPane.PLAIN_MESSAGE
+                );
+
+                if (result == JOptionPane.OK_OPTION) {
+                    String maHoaDon = tfMaHoaDon.getText().trim();
+                    String maKhachHang = tfMaKhachHang.getText().trim();
+                    String maNhanVien = tfMaNhanVien.getText().trim();
+                    String ngayLapHD = tfNgayLap.getText().trim();
+                    String tongTien = tfTongTien.getText().trim();
+                    String ghiChu = tfGhiChu.getText().trim();
+
+                    // Kiểm tra dữ liệu người dùng đã nhập
+                    if (!maHoaDon.isEmpty() && !maKhachHang.isEmpty() &&
+                            !maNhanVien.isEmpty() && !ngayLapHD.isEmpty() &&
+                            !tongTien.isEmpty()) {
+                        // Thêm vào bảng
+                        Object[] rowData = {maHoaDon, maKhachHang, maNhanVien, ngayLapHD, tongTien, ghiChu};
+                        RecordHandler.addRecord(model, rowData);
+
+                        // Tạo đối tượng HoaDon và thêm vào DB
+                        HoaDon hd = new HoaDon(
+                                Integer.parseInt(maHoaDon),
+                                Integer.parseInt(maKhachHang),
+                                Integer.parseInt(maNhanVien),
+                                new Date(ngayLapHD),  // Cách parse date này đã deprecated, khuyến cáo dùng SimpleDateFormat
+                                Float.parseFloat(tongTien),
+                                ghiChu
+                        );
+                        AddRecord(hd, "HoaDon");
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Vui lòng nhập đầy đủ thông tin!");
+                    }
                 }
             }
         });
 
+        //=================================
+        // NÚT SỬA
+        //=================================
         btnUpdate.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 int selectedRow = table.getSelectedRow();
                 if (selectedRow != -1) {
-
                     int confirm = JOptionPane.showConfirmDialog(
                             null,
                             "Bạn có chắc chắn muốn sửa hóa đơn đã chọn?",
@@ -84,39 +144,101 @@ public class QuanLyHoaDon extends BaseManagementPanel {
                     );
 
                     if (confirm == JOptionPane.YES_OPTION) {
-                        String maHoaDon = safeGetValue(selectedRow, 0);
-                        String maKhachHang = safeGetValue(selectedRow, 1);
-                        String maNhanVien = safeGetValue(selectedRow, 2);
-                        String ngayLapHoaDon = safeGetValue(selectedRow, 3);
-                        String tongTien = safeGetValue(selectedRow, 4);
-                        String ghiChu = safeGetValue(selectedRow, 5);
+                        // Lấy dữ liệu cũ từ bảng
+                        String oldMaHoaDon = safeGetValue(selectedRow, 0);
+                        String oldMaKhachHang = safeGetValue(selectedRow, 1);
+                        String oldMaNhanVien = safeGetValue(selectedRow, 2);
+                        String oldNgayLapHD = safeGetValue(selectedRow, 3);
+                        String oldTongTien = safeGetValue(selectedRow, 4);
+                        String oldGhiChu = safeGetValue(selectedRow, 5);
 
-                        if (maHoaDon != null && maKhachHang != null && maNhanVien != null && ngayLapHoaDon != null && tongTien != null) {
-                            Object[] rowData = {maHoaDon, maKhachHang, maNhanVien, ngayLapHoaDon, tongTien, ghiChu};
-                            RecordHandler.updateRecord(model, selectedRow, rowData);
+                        // Tạo panel để sửa dữ liệu
+                        JPanel inputPanel = new JPanel(new GridLayout(6, 2, 5, 5));
 
-                            HoaDon hd = new HoaDon(
-                                    Integer.parseInt(maHoaDon),
-                                    Integer.parseInt(maKhachHang),
-                                    Integer.parseInt(maNhanVien),
-                                    new Date(ngayLapHoaDon),
-                                    Float.parseFloat(tongTien),
-                                    ghiChu
-                            );
-                            UpdateRecord(hd, "HoaDon", "MaHoaDon", Integer.parseInt(maHoaDon));
+                        JLabel lblMaHoaDon = new JLabel("Mã Hóa Đơn:");
+                        JTextField tfMaHoaDon = new JTextField(oldMaHoaDon);
 
-                            JOptionPane.showMessageDialog(null, "Sửa thành công!");
-                        } else {
-                            JOptionPane.showMessageDialog(null, "Vui lòng nhập đầy đủ thông tin!");
+                        JLabel lblMaKhachHang = new JLabel("Mã Khách Hàng:");
+                        JTextField tfMaKhachHang = new JTextField(oldMaKhachHang);
+
+                        JLabel lblMaNhanVien = new JLabel("Mã Nhân Viên:");
+                        JTextField tfMaNhanVien = new JTextField(oldMaNhanVien);
+
+                        JLabel lblNgayLap = new JLabel("Ngày Lập Hóa Đơn:");
+                        JTextField tfNgayLap = new JTextField(oldNgayLapHD);
+
+                        JLabel lblTongTien = new JLabel("Tổng Tiền:");
+                        JTextField tfTongTien = new JTextField(oldTongTien);
+
+                        JLabel lblGhiChu = new JLabel("Ghi Chú:");
+                        JTextField tfGhiChu = new JTextField(oldGhiChu);
+
+                        // Thêm các thành phần vào panel
+                        inputPanel.add(lblMaHoaDon);
+                        inputPanel.add(tfMaHoaDon);
+                        inputPanel.add(lblMaKhachHang);
+                        inputPanel.add(tfMaKhachHang);
+                        inputPanel.add(lblMaNhanVien);
+                        inputPanel.add(tfMaNhanVien);
+                        inputPanel.add(lblNgayLap);
+                        inputPanel.add(tfNgayLap);
+                        inputPanel.add(lblTongTien);
+                        inputPanel.add(tfTongTien);
+                        inputPanel.add(lblGhiChu);
+                        inputPanel.add(tfGhiChu);
+
+                        int result = JOptionPane.showConfirmDialog(
+                                null,
+                                inputPanel,
+                                "Sửa thông tin Hóa Đơn",
+                                JOptionPane.OK_CANCEL_OPTION,
+                                JOptionPane.PLAIN_MESSAGE
+                        );
+
+                        if (result == JOptionPane.OK_OPTION) {
+                            String newMaHoaDon = tfMaHoaDon.getText().trim();
+                            String newMaKhachHang = tfMaKhachHang.getText().trim();
+                            String newMaNhanVien = tfMaNhanVien.getText().trim();
+                            String newNgayLapHD = tfNgayLap.getText().trim();
+                            String newTongTien = tfTongTien.getText().trim();
+                            String newGhiChu = tfGhiChu.getText().trim();
+
+                            if (!newMaHoaDon.isEmpty() && !newMaKhachHang.isEmpty() &&
+                                    !newMaNhanVien.isEmpty() && !newNgayLapHD.isEmpty() &&
+                                    !newTongTien.isEmpty()) {
+                                // Cập nhật bảng
+                                Object[] rowData = {
+                                        newMaHoaDon, newMaKhachHang, newMaNhanVien,
+                                        newNgayLapHD, newTongTien, newGhiChu
+                                };
+                                RecordHandler.updateRecord(model, selectedRow, rowData);
+
+                                // Cập nhật DB
+                                HoaDon hd = new HoaDon(
+                                        Integer.parseInt(newMaHoaDon),
+                                        Integer.parseInt(newMaKhachHang),
+                                        Integer.parseInt(newMaNhanVien),
+                                        new Date(newNgayLapHD),
+                                        Float.parseFloat(newTongTien),
+                                        newGhiChu
+                                );
+                                UpdateRecord(hd, "HoaDon", "MaHoaDon", Integer.parseInt(newMaHoaDon));
+
+                                JOptionPane.showMessageDialog(null, "Sửa thành công!");
+                            } else {
+                                JOptionPane.showMessageDialog(null, "Vui lòng nhập đầy đủ thông tin!");
+                            }
                         }
                     }
-
                 } else {
                     JOptionPane.showMessageDialog(null, "Chọn một dòng để sửa!");
                 }
             }
         });
 
+        //=================================
+        // NÚT XÓA (giữ nguyên logic)
+        //=================================
         btnDelete.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {

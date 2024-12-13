@@ -4,6 +4,7 @@ import Model.LoaiKhachHang;
 import utility.RecordHandler;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -21,8 +22,6 @@ public class QuanLyLoaiKhachHang extends BaseManagementPanel {
 
     private void loadData(int columns) {
         ArrayList loaiKhachHangs = ListAllDuLieu("LoaiKhachHang");
-        Object[][] data = new Object[loaiKhachHangs.size()][columns];
-
         for (int i = 0; i < loaiKhachHangs.size(); i++) {
             LoaiKhachHang lkh = (LoaiKhachHang) loaiKhachHangs.get(i);
             Object[] rowData = {
@@ -35,34 +34,63 @@ public class QuanLyLoaiKhachHang extends BaseManagementPanel {
 
     @Override
     protected void initializeActions() {
+
+        //==================================
+        // NÚT THÊM
+        //==================================
         btnAdd.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Hiển thị hộp thoại nhập thông tin
-                String maLoaiKhachHang = JOptionPane.showInputDialog("Nhập Mã Loại Khách Hàng:");
-                String tenLoaiKhachHang = JOptionPane.showInputDialog("Nhập Tên Loại Khách Hàng:");
+                // Tạo panel nhập liệu (2 hàng, 2 cột)
+                JPanel inputPanel = new JPanel(new GridLayout(2, 2, 5, 5));
 
-                if (maLoaiKhachHang != null && tenLoaiKhachHang != null) {
-                    Object[] rowData = {maLoaiKhachHang, tenLoaiKhachHang};
-                    RecordHandler.addRecord(model, rowData);
+                JLabel lblMaLoaiKH = new JLabel("Mã Loại Khách Hàng:");
+                JTextField tfMaLoaiKH = new JTextField();
 
-                    LoaiKhachHang lkh = new LoaiKhachHang(
-                            maLoaiKhachHang,
-                            tenLoaiKhachHang
-                    );
-                    AddRecord(lkh, "LoaiKhachHang");
-                } else {
-                    JOptionPane.showMessageDialog(null, "Vui lòng nhập đầy đủ thông tin!");
+                JLabel lblTenLoaiKH = new JLabel("Tên Loại Khách Hàng:");
+                JTextField tfTenLoaiKH = new JTextField();
+
+                // Thêm các thành phần vào panel
+                inputPanel.add(lblMaLoaiKH);
+                inputPanel.add(tfMaLoaiKH);
+                inputPanel.add(lblTenLoaiKH);
+                inputPanel.add(tfTenLoaiKH);
+
+                int result = JOptionPane.showConfirmDialog(
+                        null,
+                        inputPanel,
+                        "Nhập thông tin Loại Khách Hàng",
+                        JOptionPane.OK_CANCEL_OPTION,
+                        JOptionPane.PLAIN_MESSAGE
+                );
+
+                if (result == JOptionPane.OK_OPTION) {
+                    String maLoaiKhachHang = tfMaLoaiKH.getText().trim();
+                    String tenLoaiKhachHang = tfTenLoaiKH.getText().trim();
+
+                    if (!maLoaiKhachHang.isEmpty() && !tenLoaiKhachHang.isEmpty()) {
+                        // Thêm vào bảng
+                        Object[] rowData = {maLoaiKhachHang, tenLoaiKhachHang};
+                        RecordHandler.addRecord(model, rowData);
+
+                        // Thêm vào DB
+                        LoaiKhachHang lkh = new LoaiKhachHang(maLoaiKhachHang, tenLoaiKhachHang);
+                        AddRecord(lkh, "LoaiKhachHang");
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Vui lòng nhập đầy đủ thông tin!");
+                    }
                 }
             }
         });
 
+        //==================================
+        // NÚT SỬA
+        //==================================
         btnUpdate.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 int selectedRow = table.getSelectedRow();
                 if (selectedRow != -1) {
-
                     int confirm = JOptionPane.showConfirmDialog(
                             null,
                             "Bạn có chắc chắn muốn sửa loại khách hàng đã chọn?",
@@ -71,31 +99,61 @@ public class QuanLyLoaiKhachHang extends BaseManagementPanel {
                     );
 
                     if (confirm == JOptionPane.YES_OPTION) {
-                        String maLoaiKhachHang = safeGetValue(selectedRow, 0);
-                        String tenLoaiKhachHang = safeGetValue(selectedRow, 1);
+                        // Lấy dữ liệu cũ từ dòng được chọn
+                        String oldMaLoaiKH = safeGetValue(selectedRow, 0);
+                        String oldTenLoaiKH = safeGetValue(selectedRow, 1);
 
-                        if (maLoaiKhachHang != null && tenLoaiKhachHang != null) {
-                            Object[] rowData = {maLoaiKhachHang, tenLoaiKhachHang};
-                            RecordHandler.updateRecord(model, selectedRow, rowData);
+                        // Tạo panel để sửa dữ liệu
+                        JPanel inputPanel = new JPanel(new GridLayout(2, 2, 5, 5));
 
-                            LoaiKhachHang lkh = new LoaiKhachHang(
-                                    maLoaiKhachHang,
-                                    tenLoaiKhachHang
-                            );
-                            UpdateRecord(lkh, "LoaiKhachHang", "MaLoaiKhachHang", Integer.parseInt(maLoaiKhachHang));
+                        JLabel lblMaLoaiKH = new JLabel("Mã Loại Khách Hàng:");
+                        JTextField tfMaLoaiKH = new JTextField(oldMaLoaiKH);
 
-                            JOptionPane.showMessageDialog(null, "Sửa thành công!");
-                        } else {
-                            JOptionPane.showMessageDialog(null, "Vui lòng nhập đầy đủ thông tin!");
+                        JLabel lblTenLoaiKH = new JLabel("Tên Loại Khách Hàng:");
+                        JTextField tfTenLoaiKH = new JTextField(oldTenLoaiKH);
+
+                        inputPanel.add(lblMaLoaiKH);
+                        inputPanel.add(tfMaLoaiKH);
+                        inputPanel.add(lblTenLoaiKH);
+                        inputPanel.add(tfTenLoaiKH);
+
+                        int result = JOptionPane.showConfirmDialog(
+                                null,
+                                inputPanel,
+                                "Sửa thông tin Loại Khách Hàng",
+                                JOptionPane.OK_CANCEL_OPTION,
+                                JOptionPane.PLAIN_MESSAGE
+                        );
+
+                        if (result == JOptionPane.OK_OPTION) {
+                            String newMaLoaiKH = tfMaLoaiKH.getText().trim();
+                            String newTenLoaiKH = tfTenLoaiKH.getText().trim();
+
+                            if (!newMaLoaiKH.isEmpty() && !newTenLoaiKH.isEmpty()) {
+                                // Cập nhật bảng
+                                Object[] rowData = {newMaLoaiKH, newTenLoaiKH};
+                                RecordHandler.updateRecord(model, selectedRow, rowData);
+
+                                // Cập nhật DB
+                                LoaiKhachHang lkh = new LoaiKhachHang(newMaLoaiKH, newTenLoaiKH);
+                                // Ở đây code gốc parse MaLoaiKhachHang thành int, nên ta giữ nguyên
+                                UpdateRecord(lkh, "LoaiKhachHang", "MaLoaiKhachHang", Integer.parseInt(newMaLoaiKH));
+
+                                JOptionPane.showMessageDialog(null, "Sửa thành công!");
+                            } else {
+                                JOptionPane.showMessageDialog(null, "Vui lòng nhập đầy đủ thông tin!");
+                            }
                         }
                     }
-
                 } else {
                     JOptionPane.showMessageDialog(null, "Chọn một dòng để sửa!");
                 }
             }
         });
 
+        //==================================
+        // NÚT XÓA (giữ nguyên)
+        //==================================
         btnDelete.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
