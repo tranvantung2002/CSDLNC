@@ -1,12 +1,10 @@
 package raven.application.form;
 
+import View.*;
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.extras.FlatSVGIcon;
 import com.formdev.flatlaf.util.UIScale;
 import raven.application.Application;
-import raven.application.form.other.FormDashboard;
-import raven.application.form.other.FormRead;
-import View.QuanLySanPham;
 import raven.menu.Menu;
 import raven.menu.MenuAction;
 
@@ -66,14 +64,70 @@ public class MainForm extends JLayeredPane {
         menu.addMenuEvent((int index, int subIndex, MenuAction action) -> {
             // Application.mainForm.showForm(new DefaultForm("Form : " + index + " " + subIndex));
             if (index == 0) {
-                Application.showForm(new FormDashboard());
+                Application.showForm(new Dashboard());
             } else if (index == 1) {
                 if (subIndex == 1) {
                     Application.showForm(new QuanLySanPham());
                 } else if (subIndex == 2) {
-                    Application.showForm(new FormRead());
+                    Application.showForm(new QuanLyLoaiSanPham());
+                } else if (subIndex == 3) {
+                    Application.showForm(new QuanLyHangSanXuat());
+                } else if (subIndex == 4) {
+                    Application.showForm(new QuanLyChiTietPhieuNhap());
+                } else if (subIndex == 5) {
+                    Application.showForm(new QuanLyPhieuNhap());
                 } else {
                     action.cancel();
+                }
+            } else if (index == 2) {
+                if (subIndex == 1) {
+                    Application.showForm(new QuanLyChucVu());
+                } else if (subIndex == 2) {
+                    Application.showForm(new QuanLyNhanVien());
+                }
+            } else if (index == 3) {
+                if (subIndex == 1) {
+                    Application.showForm(new QuanLyKhachHang());
+                } else if (subIndex == 2) {
+                    Application.showForm(new QuanLyLoaiKhachHang());
+                }
+            } else if (index == 4) {
+           	 if (subIndex == 1) {
+                 Application.showForm(new QuanLyNhaPhanPhoi());
+             } else {
+                 action.cancel();
+             }
+            } else if (index == 5) {
+            	 if (subIndex == 1) {
+            		 Application.showForm(new QuanLyNhanVien());
+                 } else if (subIndex == 2) {
+                     
+                 } else {
+                     action.cancel();
+                 }
+            } else if (index == 6) {
+                if (subIndex == 1) {
+                    Application.showForm(new QuanLyHoaDon());
+                } else if (subIndex == 2) {
+                    Application.showForm(new QuanLyChiTietHoaDon());
+                }
+            } else if (index == 7) {
+                if (subIndex == 1) {
+                    Application.showForm(new BaoCaoDoanhThuTheoQuy());
+                } else if (subIndex == 2) {
+                    Application.showForm(new BaoCaoDoanhThuTheoSanPham());
+                } else if (subIndex == 3) {
+                    Application.showForm(new BaoCaoLoiNhuan());
+                } else if (subIndex == 4) {
+                    Application.showForm(new BaoCaoNhapHang());
+                } else if (subIndex == 5) {
+                    Application.showForm(new BaoCaoKhachHangTheoLoai());
+                } else if (subIndex == 6) {
+                    Application.showForm(new BaoCaoTonKho());
+                }
+            } else if (index == 8) {
+                if (subIndex == 1) {
+                    Application.showForm(new QuanLyNguoiDung());
                 }
             } else if (index == 9) {
                 Application.logout();

@@ -6,14 +6,14 @@ public class KhachHang {
     private int MaKhachHang;
     private String TenKhachHang;
     private Date NgaySinh;
-    private int GioiTinh;
+    private String GioiTinh;
     private String DiaChi;
     private String SDT;
     private String LoaiKhachHang;
     private String GhiChu;
 
-    public KhachHang(int maKhachHang, String tenKhachHang, Date ngaySinh, int gioiTinh, String diaChi, String SDT, String loaiKhachHang, String ghiChu) {
-        MaKhachHang = maKhachHang;
+    public KhachHang(int id, String tenKhachHang, Date ngaySinh, String gioiTinh, String diaChi, String SDT, String loaiKhachHang, String ghiChu) {
+        MaKhachHang = id;
         TenKhachHang = tenKhachHang;
         NgaySinh = ngaySinh;
         GioiTinh = gioiTinh;
@@ -22,8 +22,9 @@ public class KhachHang {
         LoaiKhachHang = loaiKhachHang;
         GhiChu = ghiChu;
     }
+ 
 
-    public int getMaKhachHang() {
+	public int getMaKhachHang() {
         return MaKhachHang;
     }
 
@@ -47,11 +48,11 @@ public class KhachHang {
         NgaySinh = ngaySinh;
     }
 
-    public int getGioiTinh() {
+    public String getGioiTinh() {
         return GioiTinh;
     }
 
-    public void setGioiTinh(int gioiTinh) {
+    public void setGioiTinh(String gioiTinh) {
         GioiTinh = gioiTinh;
     }
 
