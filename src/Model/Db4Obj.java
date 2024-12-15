@@ -216,7 +216,7 @@ Db4Obj {
             SanPham sanPham5 = new SanPham(105, "Smart TV LG 55 inch", 4, 4, 12000.0f, 15000.0f, 30, 1, "imageData5", "Tivi LG");
 
             Users user1 = new Users(1, 301, "tung", "123", 1, "Quản trị viên");
-            Users user2 = new Users(2, 302, "trang456", "password456", 2, "Nhân viên bán hàng");
+            Users user2 = new Users(2, 302, "admin", "123456", 2, "Nhân viên bán hàng");
             Users user3 = new Users(3, 303, "hoang789", "password789", 3, "Nhân viên kho");
             Users user4 = new Users(4, 304, "anhduong101", "password101", 2, "Trưởng phòng IT");
             Users user5 = new Users(5, 305, "linh202", "password202", 3, "Nhân viên chăm sóc khách hàng");

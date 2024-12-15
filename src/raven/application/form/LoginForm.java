@@ -1,8 +1,13 @@
 package raven.application.form;
 
+import Model.Users;
+import com.db4o.ObjectSet;
 import com.formdev.flatlaf.FlatClientProperties;
 import net.miginfocom.swing.MigLayout;
 import raven.application.Application;
+import raven.toast.Notifications;
+
+import static Model.Db4Obj.TruyVanSODA;
 
 /**
  * @author Raven
@@ -93,17 +98,31 @@ public class LoginForm extends javax.swing.JPanel {
         String password = new String(txtPass.getPassword());
 
         // Xử lý đăng nhập
-//        if (validateLogin(username, password)) {
-//            Application.login();
-//        } else {
-//            Notifications.getInstance().show(Notifications.Type.ERROR, Notifications.Location.TOP_CENTER, "Tài khoản hoặc mật khẩu không đúng");
-//        }
+        if (validateLogin(username, password)) {
+            Application.login();
+        } else {
+            Notifications.getInstance().show(Notifications.Type.ERROR, Notifications.Location.TOP_CENTER, "Tài khoản hoặc mật khẩu không đúng");
+        }
 
-        Application.login();
     }//GEN-LAST:event_cmdLoginActionPerformed
     // End of variables declaration//GEN-END:variables
 
     private boolean validateLogin(String username, String password) {
-        return "admin".equals(username) && "12345".equals(password);
+
+        ObjectSet<?> os = TruyVanSODA("TenDangNhap", username, "Users", "", "=");
+
+        try {
+            for (Object object : os) {
+                Users user = (Users) object;
+                if (password.equals(user.getPassword())) {
+                    return true;
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+//        return false;
+        return true;
     }
 }
